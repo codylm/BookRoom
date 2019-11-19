@@ -18,6 +18,15 @@ public class Book
         this.price = price;
     }
     
+    public Book()
+    {
+        this.name = "";
+        this.author = "";
+        this.genre = "";
+        this.cover = "";
+        this.publishDate = "";
+        this.price = 0.0;
+    }
     public String getName()
     {
         return name;
