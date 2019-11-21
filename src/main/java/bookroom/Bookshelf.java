@@ -6,16 +6,18 @@ import java.util.*;
 public class Bookshelf
 {
     private int numOfShelves;
-    private String genre; //This could be an enum, but genre is kind of a fluid thing
+    private String criteriaType; //This works with an enum, using a switch or something to retrieve the right thing from the book
+    private Criteria criteria; //maybe reverse these variable names?
     
     private List<ArrayList<Book>> shelves = new ArrayList<ArrayList<Book>>();
     private boolean[] fullShelves; //Not sure about array, if shelves can be variable shouldn't this be too?
-    private int totalBooksOnShelves = 0;
+    private int numBooksOnShelves = 0;
     
-    public Bookshelf(int numOfShelves, String genre)
+    public Bookshelf(int numOfShelves, String criteriaType, Criteria criteria)
     {
         this.numOfShelves = numOfShelves;
-        this.genre = genre;
+        this.criteriaType = criteriaType;
+        this.criteria = criteria;
         this.fullShelves = new boolean[numOfShelves];
         for(int i = 0; i < numOfShelves; i++)
         {
@@ -40,14 +42,29 @@ public class Bookshelf
         numOfShelves = newNum;
     }
     
-    public String getGenre()
+    public Criteria getCriteria()
     {
-        return genre;
+        return criteria;
+    }
+    
+    public void setCriteria(Criteria criteria)
+    {
+        this.criteria = criteria;
+    }
+    
+    public String getCriteriaType()
+    {
+        return criteriaType;
+    }
+    
+    public void setCriteriaType(String criteriaType)
+    {
+        this.criteriaType = criteriaType;
     }
     
     public int getNumBooksOnShelves()
     {
-        return totalBooksOnShelves;
+        return numBooksOnShelves;
     }
     
     public int getNumBooksOnShelf(int shelf) throws InvalidNumberException
@@ -166,18 +183,86 @@ public class Bookshelf
     //I wanna alter this a bit by putting in an enum that tracks what criteria the shelf
     //is categorized by then returning things that don't fit the criteria (a string for the criteria,
     //maybe, and the enum tells what it should be checking that string against)
-    public List<Book> findAllWrongGenreBooks()
+    public List<Book> findAllWrongBooks()
     {
         List<Book> wrongBooks = new ArrayList<Book>();
-        for(int i = 0; i < shelves.size(); i++)
+        switch(criteria)
         {
-            for(int j = 0; j < shelves.get(i).size(); j++)
+        case AUTHOR:
+            for(int i = 0; i < shelves.size(); i++)
             {
-                if(shelves.get(i).get(j).getGenre() != getGenre())
+                for(int j = 0; j < shelves.get(i).size(); j++)
                 {
-                    wrongBooks.add(shelves.get(i).get(j));
+                    if(shelves.get(i).get(j).getAuthor() != getCriteriaType())
+                    {
+                        wrongBooks.add(shelves.get(i).get(j));
+                    }
                 }
             }
+            break;
+        case COVER:
+            for(int i = 0; i < shelves.size(); i++)
+            {
+                for(int j = 0; j < shelves.get(i).size(); j++)
+                {
+                    if(shelves.get(i).get(j).getCover() != getCriteriaType())
+                    {
+                        wrongBooks.add(shelves.get(i).get(j));
+                    }
+                }
+            }
+            break;
+        case GENRE:
+            for(int i = 0; i < shelves.size(); i++)
+            {
+                for(int j = 0; j < shelves.get(i).size(); j++)
+                {
+                    if(shelves.get(i).get(j).getGenre() != getCriteriaType())
+                    {
+                        wrongBooks.add(shelves.get(i).get(j));
+                    }
+                }
+            }
+            break;
+        case NAME:
+            for(int i = 0; i < shelves.size(); i++)
+            {
+                for(int j = 0; j < shelves.get(i).size(); j++)
+                {
+                    if(shelves.get(i).get(j).getName() != getCriteriaType())
+                    {
+                        wrongBooks.add(shelves.get(i).get(j));
+                    }
+                }
+            }
+            break;
+        case PRICE:
+            for(int i = 0; i < shelves.size(); i++)
+            {
+                for(int j = 0; j < shelves.get(i).size(); j++)
+                {
+                    if(shelves.get(i).get(j).getPrice() != Double.parseDouble(getCriteriaType()))
+                    {
+                        wrongBooks.add(shelves.get(i).get(j));
+                    }
+                }
+            }
+            break;
+        case PUBLISHDATE:
+            for(int i = 0; i < shelves.size(); i++)
+            {
+                for(int j = 0; j < shelves.get(i).size(); j++)
+                {
+                    if(shelves.get(i).get(j).getGenre() != getCriteriaType())
+                    {
+                        wrongBooks.add(shelves.get(i).get(j));
+                    }
+                }
+            }
+            break;
+        default:
+            break;
+            
         }
         return wrongBooks;
     }

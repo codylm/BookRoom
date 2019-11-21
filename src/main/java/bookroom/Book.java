@@ -18,6 +18,7 @@ public class Book
         this.price = price;
     }
     
+    //Do I even need this base case?
     public Book()
     {
         this.name = "";

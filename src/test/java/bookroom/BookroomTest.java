@@ -15,7 +15,7 @@ public class BookroomTest
     public void setUp() throws AllShelvesAreFullException, InvalidNumberException
     {
         Book testBook = new Book("Blah", "Blah", "Fiction", "Paperback", "Blah", 1.99);
-        bookshelf = new Bookshelf(4, "Fiction");
+        bookshelf = new Bookshelf(4, "Fiction", Criteria.GENRE);
         bookshelf.addBook(testBook, 0);
         bookshelf.addBook(testBook, 0);
         bookshelf.addBook(testBook, 0);
@@ -167,9 +167,32 @@ public class BookroomTest
         bookshelf.addBook(wrongBook3, 2);
         bookshelf.addBook(wrongBook4, 3);
         
-        List<Book> wrongBooks = bookshelf.findAllWrongGenreBooks();
+        List<Book> wrongBooks = bookshelf.findAllWrongBooks();
         List<Book> expected = new ArrayList<Book>();
         expected.add(wrongBook);
+        expected.add(wrongBook2);
+        expected.add(wrongBook3);
+        expected.add(wrongBook4);
+        
+        assertThat(wrongBooks, CoreMatchers.is(expected));
+    }
+    
+    @Test
+    public void testFindingWrongPriceBooksOnShelf() throws AllShelvesAreFullException, InvalidNumberException
+    {
+        bookshelf.setCriteria(Criteria.PRICE);
+        bookshelf.setCriteriaType("1.99");
+        Book wrongBook = new Book("Blah", "Blah", "Cookbook", "Blah", "Blah", 1.99);
+        Book wrongBook2 = new Book("Blah", "Blah", "Textbook", "Blah", "Blah", 2.99);
+        Book wrongBook3 = new Book("Blah", "Blah", "Religious", "Blah", "Blah", 3.99);
+        Book wrongBook4 = new Book("Blah", "Blah", "Romance", "Blah", "Blah", 4.99);
+        bookshelf.addBook(wrongBook, 0);
+        bookshelf.addBook(wrongBook2, 1);
+        bookshelf.addBook(wrongBook3, 2);
+        bookshelf.addBook(wrongBook4, 3);
+        
+        List<Book> wrongBooks = bookshelf.findAllWrongBooks();
+        List<Book> expected = new ArrayList<Book>();
         expected.add(wrongBook2);
         expected.add(wrongBook3);
         expected.add(wrongBook4);
