@@ -201,9 +201,59 @@ public class BookroomTest
     }
     
     @Test
+    public void testFindingWrongCoverBooksOnShelf() throws AllShelvesAreFullException, InvalidNumberException
+    {
+        bookshelf.setCriteria(Criteria.COVER);
+        bookshelf.setCriteriaType("Paperback");
+        Book wrongBook = new Book("Blah", "Blah", "Cookbook", "Hardback", "Blah", 1.99);
+        Book wrongBook2 = new Book("Blah", "Blah", "Textbook", "Paperback", "Blah", 2.99);
+        Book wrongBook3 = new Book("Blah", "Blah", "Religious", "Hardback", "Blah", 3.99);
+        Book wrongBook4 = new Book("Blah", "Blah", "Romance", "Hardback", "Blah", 4.99);
+        bookshelf.addBook(wrongBook, 0);
+        bookshelf.addBook(wrongBook2, 1);
+        bookshelf.addBook(wrongBook3, 2);
+        bookshelf.addBook(wrongBook4, 3);
+        
+        List<Book> wrongBooks = bookshelf.findAllWrongBooks();
+        List<Book> expected = new ArrayList<Book>();
+        expected.add(wrongBook);
+        expected.add(wrongBook3);
+        expected.add(wrongBook4);
+        
+        assertThat(wrongBooks, CoreMatchers.is(expected));
+    }
+    
+    @Test
     public void testGetCopiesOfBookOnShelf()
     {
         Book book = new Book("Blah", "Blah", "Fiction", "Paperback", "Blah", 1.99);
         assertEquals(5, bookshelf.getNumCopiesOfBook(book));
+    }
+    
+    @Test
+    public void testSortingSingleShelfByName() throws InvalidNumberException, AllShelvesAreFullException
+    {
+        Book book = new Book("Blah", "Blah", "Fiction", "Paperback", "Blah", 1.99);
+        Book book2 = new Book("Antimony", "Blah", "Fiction", "Paperback", "Blah", 1.99);
+        Book book3 = new Book("Zenith", "Blah", "Fiction", "Paperback", "Blah", 1.99);
+        Book book4 = new Book("Camp", "Blah", "Fiction", "Paperback", "Blah", 1.99);
+        Book book5 = new Book("Falla", "Blah", "Fiction", "Paperback", "Blah", 1.99);
+
+        bookshelf.addBook(book, 1);
+        bookshelf.addBook(book2, 1);
+        bookshelf.addBook(book3, 1);
+        bookshelf.addBook(book4, 1);
+        bookshelf.addBook(book5, 1);
+        
+        List<Book> expected = new ArrayList<Book>();
+        expected.add(book2);
+        expected.add(book);
+        expected.add(book4);
+        expected.add(book5);
+        expected.add(book3);
+        
+        bookshelf.sortSingularShelf(1);
+        
+        assertThat(bookshelf.getSingularShelf(1), CoreMatchers.is(expected));
     }
 }

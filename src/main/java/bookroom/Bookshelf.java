@@ -67,6 +67,11 @@ public class Bookshelf
         return numBooksOnShelves;
     }
     
+    public ArrayList<Book> getSingularShelf(int shelf)
+    {
+        return shelves.get(shelf);
+    }
+    
     public int getNumBooksOnShelf(int shelf) throws InvalidNumberException
     {
         if(shelf < 1 || shelf > numOfShelves)
@@ -284,5 +289,11 @@ public class Bookshelf
             }
         }
         return copies;
+    }
+    
+    //Sorts by name right now, maybe work on that more later
+    public void sortSingularShelf(int shelf) throws InvalidNumberException
+    {
+        Collections.sort(getSingularShelf(shelf));
     }
 }

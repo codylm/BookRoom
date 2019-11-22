@@ -1,6 +1,6 @@
 package bookroom;
 
-public class Book
+public class Book implements Comparable<Book>
 {
     private String name, author;
     private String genre; //enum for genre?
@@ -61,5 +61,13 @@ public class Book
     public void setPrice(float price)
     {
         this.price = price;
+    }
+
+    //I'm flying completely blind on this, but we'll see how it works
+    //We'll work with sorting by name at the moment, and maybe go from there
+    public int compareTo(Book o)
+    {
+        // TODO Auto-generated method stub
+        return getName().compareTo(o.getName());
     }
 }
