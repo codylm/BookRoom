@@ -7,8 +7,11 @@ public class Book implements Comparable<Book>
     private String cover; //enum for cover?
     private String publishDate; //should see about converting this to some kind of date object if java has that
     private double price;
+    //Honestly, this is bad code because the book shouldn't care about how it's
+    //sorted, but there's no other way I can think of at the moment to allow easy sorting.
+    private Criteria criteria; 
     
-    public Book(String name, String author, String genre, String cover, String publishDate, double price)
+    public Book(String name, String author, String genre, String cover, String publishDate, double price, Criteria criteria)
     {
         this.name = name;
         this.author = author;
@@ -16,10 +19,11 @@ public class Book implements Comparable<Book>
         this.cover = cover;
         this.publishDate = publishDate;
         this.price = price;
+        this.criteria = criteria;
     }
     
     //Do I even need this base case?
-    public Book()
+    /*public Book()
     {
         this.name = "";
         this.author = "";
@@ -27,7 +31,8 @@ public class Book implements Comparable<Book>
         this.cover = "";
         this.publishDate = "";
         this.price = 0.0;
-    }
+    }*/
+    
     public String getName()
     {
         return name;
@@ -62,12 +67,40 @@ public class Book implements Comparable<Book>
     {
         this.price = price;
     }
+    
+    public Criteria getCriteria()
+    {
+        return criteria;
+    }
+    
+    public void setCriteria(Criteria criteria)
+    {
+        this.criteria = criteria;
+    }
 
     //I'm flying completely blind on this, but we'll see how it works
     //We'll work with sorting by name at the moment, and maybe go from there
+    
     public int compareTo(Book o)
     {
-        // TODO Auto-generated method stub
-        return getName().compareTo(o.getName());
+        switch(criteria)
+        {
+            case NAME:
+                return getName().compareTo(o.getName());
+            case AUTHOR:
+                return getAuthor().compareTo(o.getAuthor());
+            case COVER:
+                return getCover().compareTo(o.getCover());
+            case GENRE:
+                return getGenre().compareTo(o.getGenre());
+            case PRICE:
+                return (getPrice() > o.getPrice()) ? (1) : (-1);
+            case PUBLISHDATE:
+                //I think this won't work properly yet, need to look into proper dating next
+                return getPublishDate().compareTo(o.getPublishDate());
+            default:
+                return 0;
+                
+        }
     }
 }

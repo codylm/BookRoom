@@ -296,4 +296,12 @@ public class Bookshelf
     {
         Collections.sort(getSingularShelf(shelf));
     }
+    
+    public void sortAllShelves() throws InvalidNumberException
+    {
+        for(int i = 0; i < shelves.size(); i++)
+        {
+            sortSingularShelf(i);
+        }
+    }
 }
