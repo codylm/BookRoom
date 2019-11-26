@@ -1,17 +1,19 @@
 package bookroom;
 
+import java.time.LocalDate;
+
 public class Book implements Comparable<Book>
 {
     private String name, author;
     private String genre; //enum for genre?
     private String cover; //enum for cover?
-    private String publishDate; //should see about converting this to some kind of date object if java has that
+    private LocalDate publishDate; //should see about converting this to some kind of date object if java has that
     private double price;
     //Honestly, this is bad code because the book shouldn't care about how it's
     //sorted, but there's no other way I can think of at the moment to allow easy sorting.
     private Criteria criteria; 
     
-    public Book(String name, String author, String genre, String cover, String publishDate, double price, Criteria criteria)
+    public Book(String name, String author, String genre, String cover, LocalDate publishDate, double price, Criteria criteria)
     {
         this.name = name;
         this.author = author;
@@ -53,7 +55,7 @@ public class Book implements Comparable<Book>
         return cover;
     }
     
-    public String getPublishDate()
+    public LocalDate getPublishDate()
     {
         return publishDate;
     }

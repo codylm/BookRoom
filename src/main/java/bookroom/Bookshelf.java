@@ -2,6 +2,7 @@ package bookroom;
 
 import java.text.DecimalFormat;
 import java.util.*;
+import java.time.LocalDate;
 
 public class Bookshelf
 {
@@ -60,6 +61,11 @@ public class Bookshelf
     public void setCriteriaType(String criteriaType)
     {
         this.criteriaType = criteriaType;
+    }
+    
+    public void setCriteriaType(LocalDate publishDate)
+    {
+        this.criteriaType = publishDate.toString();
     }
     
     public int getNumBooksOnShelves()
@@ -185,9 +191,6 @@ public class Bookshelf
         return shelf;
     }
     
-    //I wanna alter this a bit by putting in an enum that tracks what criteria the shelf
-    //is categorized by then returning things that don't fit the criteria (a string for the criteria,
-    //maybe, and the enum tells what it should be checking that string against)
     public List<Book> findAllWrongBooks()
     {
         List<Book> wrongBooks = new ArrayList<Book>();
@@ -258,7 +261,7 @@ public class Bookshelf
             {
                 for(int j = 0; j < shelves.get(i).size(); j++)
                 {
-                    if(shelves.get(i).get(j).getGenre() != getCriteriaType())
+                    if(!shelves.get(i).get(j).getPublishDate().equals(LocalDate.parse(getCriteriaType())))
                     {
                         wrongBooks.add(shelves.get(i).get(j));
                     }
