@@ -147,14 +147,14 @@ public class Bookshelf
     //need to look into how these things are tracked in real life and overhaul it to that though.
     //it's hard to say what kind of search should be used because there's every chance that the shelf won't
     //be sorted because it's representing an actual shelf
-    public Book findFirstInstanceOfBook(String name, String author) throws BookDoesNotExistException
+    public Book findFirstInstanceOfBook(long isb) throws BookDoesNotExistException
     {
         Book foundBook = null;
         for(int i = 0; i < shelves.size(); i++)
         {
             for(int j = 0; j < shelves.get(i).size(); j++)
             {
-                if(shelves.get(i).get(j).getName() == name && shelves.get(i).get(j).getAuthor() == author)
+                if(shelves.get(i).get(j).getIsb() == isb)
                 {
                     foundBook = shelves.get(i).get(j);
                     break;
@@ -168,7 +168,7 @@ public class Bookshelf
         return foundBook;
     }
     
-    public int getShelfOfFirstBookInstance(String name, String author) throws BookDoesNotExistException
+    public int getShelfOfFirstBookInstance(long isb) throws BookDoesNotExistException
     {
         Book foundBook = null;
         int shelf = 0;
@@ -176,7 +176,7 @@ public class Bookshelf
         {
             for(int j = 0; j < shelves.get(i).size(); j++)
             {
-                if(shelves.get(i).get(j).getName() == name && shelves.get(i).get(j).getAuthor() == author)
+                if(shelves.get(i).get(j).getIsb() == isb)
                 {
                     foundBook = shelves.get(i).get(j);
                     shelf = i;
@@ -285,7 +285,7 @@ public class Bookshelf
         {
             for(int j = 0; j < shelves.get(i).size(); j++)
             {
-                if(shelves.get(i).get(j).getName() == book.getName())
+                if(shelves.get(i).get(j).getIsb() == book.getIsb())
                 {
                     copies++;
                 }

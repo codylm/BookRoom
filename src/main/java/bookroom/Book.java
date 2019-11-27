@@ -11,9 +11,10 @@ public class Book implements Comparable<Book>
     private double price;
     //Honestly, this is bad code because the book shouldn't care about how it's
     //sorted, but there's no other way I can think of at the moment to allow easy sorting.
-    private Criteria criteria; 
+    private Criteria criteria;
+    private long isb;
     
-    public Book(String name, String author, String genre, String cover, LocalDate publishDate, double price, Criteria criteria)
+    public Book(String name, String author, String genre, String cover, LocalDate publishDate, double price, Criteria criteria, long isb)
     {
         this.name = name;
         this.author = author;
@@ -22,19 +23,10 @@ public class Book implements Comparable<Book>
         this.publishDate = publishDate;
         this.price = price;
         this.criteria = criteria;
+        this.isb = isb;
     }
     
-    //Do I even need this base case?
-    /*public Book()
-    {
-        this.name = "";
-        this.author = "";
-        this.genre = "";
-        this.cover = "";
-        this.publishDate = "";
-        this.price = 0.0;
-    }*/
-    
+    //I'm honestly not sure if I need setters for something that shouldn't change in real life
     public String getName()
     {
         return name;
@@ -78,6 +70,11 @@ public class Book implements Comparable<Book>
     public void setCriteria(Criteria criteria)
     {
         this.criteria = criteria;
+    }
+    
+    public long getIsb()
+    {
+        return isb;
     }
 
     //I'm flying completely blind on this, but we'll see how it works

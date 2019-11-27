@@ -15,7 +15,7 @@ public class BookroomTest
     @Before
     public void setUp() throws AllShelvesAreFullException, InvalidNumberException
     {
-        Book testBook = new Book("Blah", "Blah", "Fiction", "Paperback", LocalDate.of(1111, 1, 1), 1.99, Criteria.NAME);
+        Book testBook = new Book("Blah", "Blah", "Fiction", "Paperback", LocalDate.of(1111, 1, 1), 1.99, Criteria.NAME, 1234567890);
         bookshelf = new Bookshelf(4, "Fiction", Criteria.GENRE);
         bookshelf.addBook(testBook, 0);
         bookshelf.addBook(testBook, 0);
@@ -34,9 +34,9 @@ public class BookroomTest
     @Test
     public void testFindBookFromBookshelf() throws BookDoesNotExistException, AllShelvesAreFullException, InvalidNumberException
     {
-        Book specificBook = new Book("Specifics", "Stabspeare", "Romance", "Paperback", LocalDate.of(1111, 1, 1), 1.99, Criteria.NAME);
+        Book specificBook = new Book("Specifics", "Stabspeare", "Romance", "Paperback", LocalDate.of(1111, 1, 1), 1.99, Criteria.NAME, 1023456789);
         bookshelf.addBook(specificBook, 0);
-        Book book = bookshelf.findFirstInstanceOfBook("Specifics", "Stabspeare");
+        Book book = bookshelf.findFirstInstanceOfBook(1023456789);
         assertEquals(specificBook, book);
     }
     
@@ -45,7 +45,7 @@ public class BookroomTest
     {
         try
         {
-            Book book = bookshelf.findFirstInstanceOfBook("Specifics", "Stabspeare");
+            Book book = bookshelf.findFirstInstanceOfBook(1023456789);
             fail("Expected a BookDoesNotExistException");
         }
         catch(BookDoesNotExistException e)
@@ -57,10 +57,10 @@ public class BookroomTest
     @Test
     public void testBookPlacedOnNextEmptyShelf() throws BookDoesNotExistException, AllShelvesAreFullException, InvalidNumberException
     {
-        Book specificBook = new Book("Specifics", "Stabspeare", "Romance", "Paperback", LocalDate.of(1111, 1, 1), 1.99, Criteria.NAME);
+        Book specificBook = new Book("Specifics", "Stabspeare", "Romance", "Paperback", LocalDate.of(1111, 1, 1), 1.99, Criteria.NAME, 1023456789);
         bookshelf.toggleShelfFull(0);
         bookshelf.addBook(specificBook, 0);
-        assertEquals(1, bookshelf.getShelfOfFirstBookInstance("Specifics", "Stabspeare"));
+        assertEquals(1, bookshelf.getShelfOfFirstBookInstance(1023456789));
     }
     
     //honestly this test's a bit crap because it's doing nearly the same thing as the previous two tests
@@ -70,7 +70,7 @@ public class BookroomTest
     {
         try
         {
-            int shelf = bookshelf.getShelfOfFirstBookInstance("Specifics", "Stabspeare");
+            int shelf = bookshelf.getShelfOfFirstBookInstance(1023456789);
             fail("Expected a BookDoesNotExistException");
         }
         catch(BookDoesNotExistException e)
@@ -83,7 +83,7 @@ public class BookroomTest
     public void testAllShelvesAreFull() throws InvalidNumberException
     {
         
-        Book specificBook = new Book("Specifics", "Stabspeare", "Romance", "Paperback", LocalDate.of(1111, 1, 1), 1.99, Criteria.NAME);
+        Book specificBook = new Book("Specifics", "Stabspeare", "Romance", "Paperback", LocalDate.of(1111, 1, 1), 1.99, Criteria.NAME, 1023456789);
         for(int i = 0; i < bookshelf.getNumOfShelves(); i++)
         {
             bookshelf.toggleShelfFull(i);
@@ -159,10 +159,10 @@ public class BookroomTest
     @Test
     public void testFindingWrongGenreBooksOnShelf() throws AllShelvesAreFullException, InvalidNumberException
     {
-        Book wrongBook = new Book("Blah", "Blah", "Cookbook", "Blah", LocalDate.of(1111, 1, 1), 1.99, Criteria.NAME);
-        Book wrongBook2 = new Book("Blah", "Blah", "Textbook", "Blah", LocalDate.of(1111, 1, 1), 1.99, Criteria.NAME);
-        Book wrongBook3 = new Book("Blah", "Blah", "Religious", "Blah", LocalDate.of(1111, 1, 1), 1.99, Criteria.NAME);
-        Book wrongBook4 = new Book("Blah", "Blah", "Romance", "Blah", LocalDate.of(1111, 1, 1), 1.99, Criteria.NAME);
+        Book wrongBook = new Book("Blah", "Blah", "Cookbook", "Blah", LocalDate.of(1111, 1, 1), 1.99, Criteria.NAME, 1023456789);
+        Book wrongBook2 = new Book("Blah", "Blah", "Textbook", "Blah", LocalDate.of(1111, 1, 1), 1.99, Criteria.NAME, 1203456789);
+        Book wrongBook3 = new Book("Blah", "Blah", "Religious", "Blah", LocalDate.of(1111, 1, 1), 1.99, Criteria.NAME, 1230456789);
+        Book wrongBook4 = new Book("Blah", "Blah", "Romance", "Blah", LocalDate.of(1111, 1, 1), 1.99, Criteria.NAME, 1234056789);
         bookshelf.addBook(wrongBook, 0);
         bookshelf.addBook(wrongBook2, 1);
         bookshelf.addBook(wrongBook3, 2);
@@ -183,10 +183,10 @@ public class BookroomTest
     {
         bookshelf.setCriteria(Criteria.PRICE);
         bookshelf.setCriteriaType("1.99");
-        Book wrongBook = new Book("Blah", "Blah", "Cookbook", "Blah", LocalDate.of(1111, 1, 1), 1.99, Criteria.NAME);
-        Book wrongBook2 = new Book("Blah", "Blah", "Textbook", "Blah", LocalDate.of(1111, 1, 1), 2.99, Criteria.NAME);
-        Book wrongBook3 = new Book("Blah", "Blah", "Religious", "Blah", LocalDate.of(1111, 1, 1), 3.99, Criteria.NAME);
-        Book wrongBook4 = new Book("Blah", "Blah", "Romance", "Blah", LocalDate.of(1111, 1, 1), 4.99, Criteria.NAME);
+        Book wrongBook = new Book("Blah", "Blah", "Cookbook", "Blah", LocalDate.of(1111, 1, 1), 1.99, Criteria.NAME, 1023456789);
+        Book wrongBook2 = new Book("Blah", "Blah", "Textbook", "Blah", LocalDate.of(1111, 1, 1), 2.99, Criteria.NAME, 1203456789);
+        Book wrongBook3 = new Book("Blah", "Blah", "Religious", "Blah", LocalDate.of(1111, 1, 1), 3.99, Criteria.NAME, 1230456789);
+        Book wrongBook4 = new Book("Blah", "Blah", "Romance", "Blah", LocalDate.of(1111, 1, 1), 4.99, Criteria.NAME, 1234056789);
         bookshelf.addBook(wrongBook, 0);
         bookshelf.addBook(wrongBook2, 1);
         bookshelf.addBook(wrongBook3, 2);
@@ -206,10 +206,10 @@ public class BookroomTest
     {
         bookshelf.setCriteria(Criteria.COVER);
         bookshelf.setCriteriaType("Paperback");
-        Book wrongBook = new Book("Blah", "Blah", "Cookbook", "Hardback", LocalDate.of(1111, 1, 1), 1.99, Criteria.NAME);
-        Book wrongBook2 = new Book("Blah", "Blah", "Textbook", "Paperback", LocalDate.of(1111, 1, 1), 2.99, Criteria.NAME);
-        Book wrongBook3 = new Book("Blah", "Blah", "Religious", "Hardback", LocalDate.of(1111, 1, 1), 3.99, Criteria.NAME);
-        Book wrongBook4 = new Book("Blah", "Blah", "Romance", "Hardback", LocalDate.of(1111, 1, 1), 4.99, Criteria.NAME);
+        Book wrongBook = new Book("Blah", "Blah", "Cookbook", "Hardback", LocalDate.of(1111, 1, 1), 1.99, Criteria.NAME, 1023456789);
+        Book wrongBook2 = new Book("Blah", "Blah", "Textbook", "Paperback", LocalDate.of(1111, 1, 1), 2.99, Criteria.NAME, 1203456789);
+        Book wrongBook3 = new Book("Blah", "Blah", "Religious", "Hardback", LocalDate.of(1111, 1, 1), 3.99, Criteria.NAME, 1230456789);
+        Book wrongBook4 = new Book("Blah", "Blah", "Romance", "Hardback", LocalDate.of(1111, 1, 1), 4.99, Criteria.NAME, 1234056789);
         bookshelf.addBook(wrongBook, 0);
         bookshelf.addBook(wrongBook2, 1);
         bookshelf.addBook(wrongBook3, 2);
@@ -229,10 +229,10 @@ public class BookroomTest
     {
         bookshelf.setCriteria(Criteria.AUTHOR);
         bookshelf.setCriteriaType("Blah");
-        Book wrongBook = new Book("Blah", "Blah", "Cookbook", "Hardback", LocalDate.of(1111, 1, 1), 1.99, Criteria.AUTHOR);
-        Book wrongBook2 = new Book("Blah", "Shakespeare", "Textbook", "Paperback", LocalDate.of(1111, 1, 1), 2.99, Criteria.AUTHOR);
-        Book wrongBook3 = new Book("Blah", "Bradbury", "Religious", "Hardback", LocalDate.of(1111, 1, 1), 3.99, Criteria.AUTHOR);
-        Book wrongBook4 = new Book("Blah", "Huxley", "Romance", "Hardback", LocalDate.of(1111, 1, 1), 4.99, Criteria.AUTHOR);
+        Book wrongBook = new Book("Blah", "Blah", "Cookbook", "Hardback", LocalDate.of(1111, 1, 1), 1.99, Criteria.AUTHOR, 1023456789);
+        Book wrongBook2 = new Book("Blah", "Shakespeare", "Textbook", "Paperback", LocalDate.of(1111, 1, 1), 2.99, Criteria.AUTHOR, 1203456789);
+        Book wrongBook3 = new Book("Blah", "Bradbury", "Religious", "Hardback", LocalDate.of(1111, 1, 1), 3.99, Criteria.AUTHOR, 1230456789);
+        Book wrongBook4 = new Book("Blah", "Huxley", "Romance", "Hardback", LocalDate.of(1111, 1, 1), 4.99, Criteria.AUTHOR, 1234056789);
         bookshelf.addBook(wrongBook, 0);
         bookshelf.addBook(wrongBook2, 1);
         bookshelf.addBook(wrongBook3, 2);
@@ -252,10 +252,10 @@ public class BookroomTest
     {
         bookshelf.setCriteria(Criteria.PUBLISHDATE);
         bookshelf.setCriteriaType(LocalDate.of(1111, 1, 1));
-        Book wrongBook = new Book("Blah", "Blah", "Cookbook", "Hardback", LocalDate.of(1111, 1, 1), 1.99, Criteria.PUBLISHDATE);
-        Book wrongBook2 = new Book("Worm", "Shakespeare", "Textbook", "Paperback", LocalDate.of(1111, 2, 1), 2.99, Criteria.PUBLISHDATE);
-        Book wrongBook3 = new Book("Blah", "Bradbury", "Religious", "Hardback", LocalDate.of(1111, 2, 1), 3.99, Criteria.PUBLISHDATE);
-        Book wrongBook4 = new Book("Lord of the Flies", "Huxley", "Romance", "Hardback", LocalDate.of(1111, 1, 1), 4.99, Criteria.PUBLISHDATE);
+        Book wrongBook = new Book("Blah", "Blah", "Cookbook", "Hardback", LocalDate.of(1111, 1, 1), 1.99, Criteria.PUBLISHDATE, 1023456789);
+        Book wrongBook2 = new Book("Worm", "Shakespeare", "Textbook", "Paperback", LocalDate.of(1111, 2, 1), 2.99, Criteria.PUBLISHDATE, 1203456789);
+        Book wrongBook3 = new Book("Blah", "Bradbury", "Religious", "Hardback", LocalDate.of(1111, 2, 1), 3.99, Criteria.PUBLISHDATE, 1230456789);
+        Book wrongBook4 = new Book("Lord of the Flies", "Huxley", "Romance", "Hardback", LocalDate.of(1111, 1, 1), 4.99, Criteria.PUBLISHDATE, 1234056789);
         bookshelf.addBook(wrongBook, 0);
         bookshelf.addBook(wrongBook2, 1);
         bookshelf.addBook(wrongBook3, 2);
@@ -272,18 +272,18 @@ public class BookroomTest
     @Test
     public void testGetCopiesOfBookOnShelf()
     {
-        Book book = new Book("Blah", "Blah", "Fiction", "Paperback", LocalDate.of(1111, 1, 1), 1.99, Criteria.NAME);
+        Book book = new Book("Blah", "Blah", "Fiction", "Paperback", LocalDate.of(1111, 1, 1), 1.99, Criteria.NAME, 1234567890);
         assertEquals(5, bookshelf.getNumCopiesOfBook(book));
     }
     
     @Test
     public void testSortingSingleShelfByName() throws InvalidNumberException, AllShelvesAreFullException
     {
-        Book book = new Book("Blah", "Blah", "Fiction", "Paperback", LocalDate.of(1111, 1, 1), 1.99, Criteria.NAME);
-        Book book2 = new Book("Antimony", "Blah", "Fiction", "Paperback", LocalDate.of(1111, 1, 1), 1.99, Criteria.NAME);
-        Book book3 = new Book("Zenith", "Blah", "Fiction", "Paperback", LocalDate.of(1111, 1, 1), 1.99, Criteria.NAME);
-        Book book4 = new Book("Camp", "Blah", "Fiction", "Paperback", LocalDate.of(1111, 1, 1), 1.99, Criteria.NAME);
-        Book book5 = new Book("Falla", "Blah", "Fiction", "Paperback", LocalDate.of(1111, 1, 1), 1.99, Criteria.NAME);
+        Book book = new Book("Blah", "Blah", "Fiction", "Paperback", LocalDate.of(1111, 1, 1), 1.99, Criteria.NAME, 1023456789);
+        Book book2 = new Book("Antimony", "Blah", "Fiction", "Paperback", LocalDate.of(1111, 1, 1), 1.99, Criteria.NAME, 1203456789);
+        Book book3 = new Book("Zenith", "Blah", "Fiction", "Paperback", LocalDate.of(1111, 1, 1), 1.99, Criteria.NAME, 1230456789);
+        Book book4 = new Book("Camp", "Blah", "Fiction", "Paperback", LocalDate.of(1111, 1, 1), 1.99, Criteria.NAME, 1234056789);
+        Book book5 = new Book("Falla", "Blah", "Fiction", "Paperback", LocalDate.of(1111, 1, 1), 1.99, Criteria.NAME, 1234506789);
 
         bookshelf.addBook(book, 1);
         bookshelf.addBook(book2, 1);
@@ -306,11 +306,11 @@ public class BookroomTest
     @Test
     public void testSortingAllShelvesByName() throws InvalidNumberException, AllShelvesAreFullException
     {
-        Book book = new Book("Blah", "Blah", "Fiction", "Paperback", LocalDate.of(1111, 1, 1), 1.99, Criteria.NAME);
-        Book book2 = new Book("Antimony", "Blah", "Fiction", "Paperback", LocalDate.of(1111, 1, 1), 1.99, Criteria.NAME);
-        Book book3 = new Book("Zenith", "Blah", "Fiction", "Paperback", LocalDate.of(1111, 1, 1), 1.99, Criteria.NAME);
-        Book book4 = new Book("Camp", "Blah", "Fiction", "Paperback", LocalDate.of(1111, 1, 1), 1.99, Criteria.NAME);
-        Book book5 = new Book("Falla", "Blah", "Fiction", "Paperback", LocalDate.of(1111, 1, 1), 1.99, Criteria.NAME);
+        Book book = new Book("Blah", "Blah", "Fiction", "Paperback", LocalDate.of(1111, 1, 1), 1.99, Criteria.NAME, 1023456789);
+        Book book2 = new Book("Antimony", "Blah", "Fiction", "Paperback", LocalDate.of(1111, 1, 1), 1.99, Criteria.NAME, 1203456789);
+        Book book3 = new Book("Zenith", "Blah", "Fiction", "Paperback", LocalDate.of(1111, 1, 1), 1.99, Criteria.NAME, 1230456789);
+        Book book4 = new Book("Camp", "Blah", "Fiction", "Paperback", LocalDate.of(1111, 1, 1), 1.99, Criteria.NAME, 1234056789);
+        Book book5 = new Book("Falla", "Blah", "Fiction", "Paperback", LocalDate.of(1111, 1, 1), 1.99, Criteria.NAME, 1234506789);
 
         bookshelf.addBook(book, 1);
         bookshelf.addBook(book2, 1);
@@ -340,11 +340,11 @@ public class BookroomTest
     @Test
     public void testSortingSingularShelfByAuthor() throws InvalidNumberException, AllShelvesAreFullException
     {
-        Book book = new Book("Blah", "Blah", "Fiction", "Paperback", LocalDate.of(1111, 1, 1), 1.99, Criteria.AUTHOR);
-        Book book2 = new Book("Antimony", "Fallon", "Fiction", "Paperback", LocalDate.of(1111, 1, 1), 1.99, Criteria.AUTHOR);
-        Book book3 = new Book("Zenith", "Carver", "Fiction", "Paperback", LocalDate.of(1111, 1, 1), 1.99, Criteria.AUTHOR);
-        Book book4 = new Book("Camp", "Zimo", "Fiction", "Paperback", LocalDate.of(1111, 1, 1), 1.99, Criteria.AUTHOR);
-        Book book5 = new Book("Falla", "Dallon", "Fiction", "Paperback", LocalDate.of(1111, 1, 1), 1.99, Criteria.AUTHOR);
+        Book book = new Book("Blah", "Blah", "Fiction", "Paperback", LocalDate.of(1111, 1, 1), 1.99, Criteria.AUTHOR, 1023456789);
+        Book book2 = new Book("Antimony", "Fallon", "Fiction", "Paperback", LocalDate.of(1111, 1, 1), 1.99, Criteria.AUTHOR, 1203456789);
+        Book book3 = new Book("Zenith", "Carver", "Fiction", "Paperback", LocalDate.of(1111, 1, 1), 1.99, Criteria.AUTHOR, 1230456789);
+        Book book4 = new Book("Camp", "Zimo", "Fiction", "Paperback", LocalDate.of(1111, 1, 1), 1.99, Criteria.AUTHOR, 1234056789);
+        Book book5 = new Book("Falla", "Dallon", "Fiction", "Paperback", LocalDate.of(1111, 1, 1), 1.99, Criteria.AUTHOR, 1234506789);
 
         bookshelf.addBook(book, 1);
         bookshelf.addBook(book2, 1);
@@ -367,11 +367,11 @@ public class BookroomTest
     @Test
     public void testSortingSingularShelfByPrice() throws InvalidNumberException, AllShelvesAreFullException
     {
-        Book book = new Book("Blah", "Blah", "Fiction", "Paperback", LocalDate.of(1111, 1, 1), 4.99, Criteria.PRICE);
-        Book book2 = new Book("Antimony", "Fallon", "Fiction", "Paperback", LocalDate.of(1111, 1, 1), 1.99, Criteria.PRICE);
-        Book book3 = new Book("Zenith", "Carver", "Fiction", "Paperback", LocalDate.of(1111, 1, 1), 6.99, Criteria.PRICE);
-        Book book4 = new Book("Camp", "Zimo", "Fiction", "Paperback", LocalDate.of(1111, 1, 1), 5.99, Criteria.PRICE);
-        Book book5 = new Book("Falla", "Dallon", "Fiction", "Paperback", LocalDate.of(1111, 1, 1), 2.99, Criteria.PRICE);
+        Book book = new Book("Blah", "Blah", "Fiction", "Paperback", LocalDate.of(1111, 1, 1), 4.99, Criteria.PRICE, 1023456789);
+        Book book2 = new Book("Antimony", "Fallon", "Fiction", "Paperback", LocalDate.of(1111, 1, 1), 1.99, Criteria.PRICE, 1203456789);
+        Book book3 = new Book("Zenith", "Carver", "Fiction", "Paperback", LocalDate.of(1111, 1, 1), 6.99, Criteria.PRICE, 1230456789);
+        Book book4 = new Book("Camp", "Zimo", "Fiction", "Paperback", LocalDate.of(1111, 1, 1), 5.99, Criteria.PRICE, 1234056789);
+        Book book5 = new Book("Falla", "Dallon", "Fiction", "Paperback", LocalDate.of(1111, 1, 1), 2.99, Criteria.PRICE, 1234506789);
 
         bookshelf.addBook(book, 1);
         bookshelf.addBook(book2, 1);
