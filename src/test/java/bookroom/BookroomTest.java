@@ -11,17 +11,23 @@ public class BookroomTest
 {
     
     private Bookshelf bookshelf;
+    private Bookroom bookroom;
+    private Book testBook;
     
     @Before
     public void setUp() throws AllShelvesAreFullException, InvalidNumberException
     {
-        Book testBook = new Book("Blah", "Blah", "Fiction", "Paperback", LocalDate.of(1111, 1, 1), 1.99, Criteria.NAME, 1234567890);
+        testBook = new Book("Blah", "Blah", "Fiction", "Paperback", LocalDate.of(1111, 1, 1), 1.99, Criteria.NAME, 1234567890);
         bookshelf = new Bookshelf(4, "Fiction", Criteria.GENRE);
+        bookroom = new Bookroom();
+        
         bookshelf.addBook(testBook, 0);
         bookshelf.addBook(testBook, 0);
         bookshelf.addBook(testBook, 0);
         bookshelf.addBook(testBook, 0);
         bookshelf.addBook(testBook, 0);
+        
+        bookroom.addShelf(0, bookshelf);
     }
     
     @Test
@@ -389,5 +395,13 @@ public class BookroomTest
         bookshelf.sortSingularShelf(1);
         
         assertThat(bookshelf.getSingularShelf(1), CoreMatchers.is(expected));
+    }
+    
+    @Test
+    public void testGettingGrossRevenueOfBookroom()
+    {
+        bookroom.addShelf(1, bookshelf);
+        double revenue = bookroom.getGrossRevenue();
+        assertEquals(19.90, revenue, 0.0);
     }
 }
