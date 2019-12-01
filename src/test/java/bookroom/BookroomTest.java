@@ -404,4 +404,68 @@ public class BookroomTest
         double revenue = bookroom.getGrossRevenue();
         assertEquals(19.90, revenue, 0.0);
     }
+    
+    @Test
+    public void testGetAllShelfCriteria()
+    {
+        List<Criteria> expected = new ArrayList<Criteria>();
+        expected.add(Criteria.GENRE);
+        expected.add(Criteria.AUTHOR);
+        
+        Bookshelf bookshelf2 = new Bookshelf(4, "Fiction", Criteria.AUTHOR);
+        bookroom.addShelf(1, bookshelf2);
+        
+        List<Criteria> actual = bookroom.getAllShelfCriteria();
+        
+        
+        assertThat(actual, CoreMatchers.is(expected));
+    }
+
+    @Test
+    public void testGetAllShelfCriteriaTypes()
+    {
+        List<String> expected = new ArrayList<String>();
+        expected.add("Fiction");
+        expected.add("Shakespeare");
+        
+        Bookshelf bookshelf2 = new Bookshelf(4, "Shakespeare", Criteria.AUTHOR);
+        bookroom.addShelf(1, bookshelf2);
+        
+        List<String> actual = bookroom.getAllShelfCriteriaTypes();
+        
+        
+        assertThat(actual, CoreMatchers.is(expected));
+    }
+    
+    
+    @Test
+    public void testFindFirstShelfOfBook() throws AllShelvesAreFullException, InvalidNumberException
+    {
+        long isbn = 1023456789;
+        Book book = new Book("Blah", "Blah", "Fiction", "Paperback", LocalDate.of(1111, 1, 1), 4.99, Criteria.PRICE, 1023456789);
+        Bookshelf newShelf = new Bookshelf(4, "Fiction", Criteria.GENRE);
+        newShelf.addBook(book, 0);
+        bookroom.addShelf(1, newShelf);
+        
+        
+        Bookshelf firstShelf = bookroom.findFirstShelfOfBook(isbn);
+        
+        assertEquals(newShelf, firstShelf);
+    }
+    
+    //test
+    //test2
+    //test3
+    @Test
+    public void testGetNumCopiesOfBook() throws AllShelvesAreFullException, InvalidNumberException
+    {
+        Bookshelf bookshelf2 = new Bookshelf(4, "Fiction", Criteria.GENRE);
+        bookroom.addShelf(1, bookshelf2);
+        bookshelf2.addBook(testBook, 2);
+        bookshelf2.addBook(testBook, 3);
+        bookshelf2.addBook(testBook, 1);
+        int copies = bookroom.getNumCopiesOfBook(testBook);
+        assertEquals(8, copies);
+    }
+    
 }

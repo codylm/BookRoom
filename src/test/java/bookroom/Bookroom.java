@@ -24,12 +24,6 @@ public class Bookroom
     public double getGrossRevenue()
     {
         double revenue = 0.0;
-        /*Iterator iterator = shelves.entrySet().iterator();
-        while (iterator.hasNext()) {
-            Map.Entry pair = (Map.Entry)iterator.next();
-            revenue += pair.getValue().getGrossRevenue();
-            iterator.remove(); // avoids a ConcurrentModificationException
-        }*/
         
         //honestly i maybe should've used getshelf here, but whatever
         for(Bookshelf value : shelves.values())
@@ -38,5 +32,63 @@ public class Bookroom
         }
         
         return revenue;
+    }
+    
+    public List<Criteria> getAllShelfCriteria()
+    {
+        List<Criteria> criteria = new ArrayList<Criteria>();
+        for(Bookshelf value : shelves.values())
+        {
+            criteria.add(value.getCriteria());
+        }
+        
+        return criteria;
+    }
+    
+    public List<String> getAllShelfCriteriaTypes()
+    {
+        List<String> types = new ArrayList<String>();
+        for(Bookshelf value : shelves.values())
+        {
+            types.add(value.getCriteriaType());
+        }
+        
+        return types;
+    }
+    
+    //I think I need an exception here, though maybe not
+    public Bookshelf findFirstShelfOfBook(long isb)
+    {
+        int shelfFound = -1;
+        for(Bookshelf value : shelves.values())
+        {
+            try
+            {
+                shelfFound = value.getShelfOfFirstBookInstance(isb);
+                if(shelfFound != -1) return value;
+            }
+            catch(BookDoesNotExistException e)
+            {
+                continue;
+            }
+        }
+        
+        return null;
+    }
+    
+    /*public Book findFirstInstanceOfBook(long isb)
+    {
+       I'm not sure I actually need this one, i'll leave it in as a comment for now 
+    }*/
+    
+    //not sure if this should take a book or an isbn
+    public int getNumCopiesOfBook(Book book)
+    {
+        int copies = 0;
+        for(Bookshelf value : shelves.values())
+        {
+            copies += value.getNumCopiesOfBook(book);
+        }
+        return copies;
     }
 }
