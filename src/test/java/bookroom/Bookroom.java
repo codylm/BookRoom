@@ -5,10 +5,12 @@ import java.util.*;
 public class Bookroom
 {
     private Map<Integer, Bookshelf> shelves;
+    private double percentRestock;
     
-    public Bookroom()
+    public Bookroom(double percentRestock)
     {
         shelves = new HashMap<Integer, Bookshelf>();
+        this.percentRestock = percentRestock;
     }
     
     public void addShelf(int key, Bookshelf shelf)
@@ -19,6 +21,16 @@ public class Bookroom
     public Bookshelf getShelf(int key)
     {
         return shelves.get(key);
+    }
+    
+    public void setPercentRestock(double percentRestock)
+    {
+        this.percentRestock = percentRestock;
+    }
+    
+    public double getPercentRestock()
+    {
+        return percentRestock;
     }
     
     public double getGrossRevenue()
@@ -90,5 +102,23 @@ public class Bookroom
             copies += value.getNumCopiesOfBook(book);
         }
         return copies;
+    }
+    
+    public boolean checkForRestock()
+    {
+        double percent = 0.0;
+        int numOfShelves = shelves.size();
+        int shelvesNeedingRestock = 0;
+        for(Bookshelf value : shelves.values())
+        {
+            if(value.getRestock())
+            {
+                shelvesNeedingRestock++;
+            }
+        }
+        
+        percent = (double)shelvesNeedingRestock / (double)numOfShelves;
+        if(percent >= percentRestock) return true;
+        else return false;
     }
 }

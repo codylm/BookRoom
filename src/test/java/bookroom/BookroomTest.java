@@ -19,7 +19,7 @@ public class BookroomTest
     {
         testBook = new Book("Blah", "Blah", "Fiction", "Paperback", LocalDate.of(1111, 1, 1), 1.99, Criteria.NAME, 1234567890);
         bookshelf = new Bookshelf(4, "Fiction", Criteria.GENRE);
-        bookroom = new Bookroom();
+        bookroom = new Bookroom(0.4);
         
         bookshelf.addBook(testBook, 0);
         bookshelf.addBook(testBook, 0);
@@ -453,9 +453,6 @@ public class BookroomTest
         assertEquals(newShelf, firstShelf);
     }
     
-    //test
-    //test2
-    //test3
     @Test
     public void testGetNumCopiesOfBook() throws AllShelvesAreFullException, InvalidNumberException
     {
@@ -466,6 +463,25 @@ public class BookroomTest
         bookshelf2.addBook(testBook, 1);
         int copies = bookroom.getNumCopiesOfBook(testBook);
         assertEquals(8, copies);
+    }
+    
+    @Test
+    public void testBookroomNeedsRestocking()
+    {
+        boolean needsRestocking = false;
+        Bookshelf bookshelf2 = new Bookshelf(4, "Fiction", Criteria.GENRE);
+        Bookshelf bookshelf3 = new Bookshelf(4, "Fiction", Criteria.GENRE);
+        Bookshelf bookshelf4 = new Bookshelf(4, "Fiction", Criteria.GENRE);
+        Bookshelf bookshelf5 = new Bookshelf(4, "Fiction", Criteria.GENRE);
+        bookroom.addShelf(1, bookshelf2);
+        bookroom.addShelf(2, bookshelf3);
+        bookroom.addShelf(3, bookshelf4);
+        bookroom.addShelf(4, bookshelf5);
+        bookroom.getShelf(0).setRestock();
+        bookroom.getShelf(1).setRestock();
+        
+        needsRestocking = bookroom.checkForRestock();
+        assertTrue(needsRestocking);
     }
     
 }

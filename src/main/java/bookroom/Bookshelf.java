@@ -9,6 +9,7 @@ public class Bookshelf
     private int numOfShelves;
     private String criteriaType; //This works with an enum, using a switch or something to retrieve the right thing from the book
     private Criteria criteria; //maybe reverse these variable names?
+    private boolean restock;
     
     private List<ArrayList<Book>> shelves = new ArrayList<ArrayList<Book>>();
     private boolean[] fullShelves; //Not sure about array, if shelves can be variable shouldn't this be too?
@@ -24,6 +25,8 @@ public class Bookshelf
         {
             shelves.add(new ArrayList<Book>());
         }
+        
+        restock = false;
     }
     
     public int getNumOfShelves()
@@ -94,6 +97,23 @@ public class Bookshelf
             throw new InvalidNumberException("Shelf number cannot be negative or greater than the total number of shelves.");
         }
         return fullShelves[shelf];
+    }
+    
+    public boolean getRestock()
+    {
+        return restock;
+    }
+    
+    public void setRestock()
+    {
+        if(restock == true)
+        {
+            restock = false;
+        }
+        else
+        {
+            restock = true;
+        }
     }
     
     //I just remembered that getShelfIsFull throws that exception, which handles things here.
