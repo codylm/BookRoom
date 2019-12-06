@@ -1,11 +1,14 @@
 package bookroom;
 
 import java.util.*;
+import java.io.*;
+import java.text.SimpleDateFormat;
 
 public class Bookroom
 {
     private Map<Integer, Bookshelf> shelves;
     private double percentRestock;
+    private boolean needsRestock;
     
     public Bookroom(double percentRestock)
     {
@@ -118,7 +121,45 @@ public class Bookroom
         }
         
         percent = (double)shelvesNeedingRestock / (double)numOfShelves;
-        if(percent >= percentRestock) return true;
-        else return false;
+        if(percent >= percentRestock)
+        {
+            //I'm honestly not sure if this is the best way to handle this
+            needsRestock = true;
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    
+    public void signalRestock(String restockerName)
+    {
+        for(Bookshelf value : shelves.values())
+        {
+            if(value.getRestock() == true) value.setRestock();
+        }
+        BufferedWriter writer = null;
+        try
+        {
+            String timeLog = new SimpleDateFormat("MM-dd-yyyy hh:mm:ss a").format(Calendar.getInstance().getTime());
+            File logFile = new File("Restock Data");
+
+            writer = new BufferedWriter(new FileWriter(logFile, true));
+            writer.write(restockerName + " " + timeLog + "\n");
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            try
+            {
+                // Close the writer regardless of what happens...
+                writer.close();
+            }
+            catch (Exception e){}
+        }
     }
 }

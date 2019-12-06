@@ -7,7 +7,7 @@ public class Book implements Comparable<Book>
     private String name, author;
     private String genre; //enum for genre?
     private String cover; //enum for cover?
-    private LocalDate publishDate; //should see about converting this to some kind of date object if java has that
+    private LocalDate publishDate;
     private double price;
     //Honestly, this is bad code because the book shouldn't care about how it's
     //sorted, but there's no other way I can think of at the moment to allow easy sorting.

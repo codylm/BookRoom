@@ -484,4 +484,24 @@ public class BookroomTest
         assertTrue(needsRestocking);
     }
     
+    @Test
+    public void testSignalRestock()
+    {
+        boolean needsRestocking = true;
+        Bookshelf bookshelf2 = new Bookshelf(4, "Fiction", Criteria.GENRE);
+        Bookshelf bookshelf3 = new Bookshelf(4, "Fiction", Criteria.GENRE);
+        Bookshelf bookshelf4 = new Bookshelf(4, "Fiction", Criteria.GENRE);
+        Bookshelf bookshelf5 = new Bookshelf(4, "Fiction", Criteria.GENRE);
+        bookroom.addShelf(1, bookshelf2);
+        bookroom.addShelf(2, bookshelf3);
+        bookroom.addShelf(3, bookshelf4);
+        bookroom.addShelf(4, bookshelf5);
+        bookroom.getShelf(0).setRestock();
+        bookroom.getShelf(1).setRestock();
+        
+        bookroom.signalRestock("Carrie");
+        needsRestocking = bookroom.checkForRestock();
+        
+        assertFalse(needsRestocking);
+    }
 }
