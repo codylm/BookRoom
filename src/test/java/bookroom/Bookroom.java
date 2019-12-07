@@ -125,6 +125,28 @@ public class Bookroom
         {
             //I'm honestly not sure if this is the best way to handle this
             needsRestock = true;
+            BufferedWriter writer = null;
+            try
+            {
+                String timeLog = new SimpleDateFormat("MM-dd-yyyy hh:mm:ss a").format(Calendar.getInstance().getTime());
+                File logFile = new File("Restock Data");
+
+                writer = new BufferedWriter(new FileWriter(logFile, true));
+                writer.write("Restock " + timeLog + "\n");
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+            finally
+            {
+                try
+                {
+                    // Close the writer regardless of what happens...
+                    writer.close();
+                }
+                catch (Exception e){}
+            }
             return true;
         }
         else
