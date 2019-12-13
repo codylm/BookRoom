@@ -128,8 +128,8 @@ public class Bookroom
             BufferedWriter writer = null;
             try
             {
-                String timeLog = new SimpleDateFormat("MM-dd-yyyy hh:mm:ss a").format(Calendar.getInstance().getTime());
-                File logFile = new File("Restock Data");
+                String timeLog = new SimpleDateFormat("EEE dd MMM yyyy hh:mm a").format(Calendar.getInstance().getTime());
+                File logFile = new File("RestockData.txt");
 
                 writer = new BufferedWriter(new FileWriter(logFile, true));
                 writer.write("Restock " + timeLog + "\n");
@@ -164,8 +164,8 @@ public class Bookroom
         BufferedWriter writer = null;
         try
         {
-            String timeLog = new SimpleDateFormat("MM-dd-yyyy hh:mm:ss a").format(Calendar.getInstance().getTime());
-            File logFile = new File("Restock Data");
+            String timeLog = new SimpleDateFormat("EEE dd MMM yyyy hh:mm a").format(Calendar.getInstance().getTime());
+            File logFile = new File("RestockData.txt");
 
             writer = new BufferedWriter(new FileWriter(logFile, true));
             writer.write(restockerName + " " + timeLog + "\n");
