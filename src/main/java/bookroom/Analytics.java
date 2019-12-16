@@ -1,5 +1,7 @@
 package bookroom;
 
+import java.io.*;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class Analytics
@@ -26,18 +28,54 @@ public class Analytics
         restockData = new ArrayList<String>();
     }
     
+    public void readRestockFile()
+    {
+        BufferedReader reader = null;
+        String line = null;
+        try
+        {
+            reader = new BufferedReader(new FileReader("RestockData.txt"));
+            String[] words = new String[10];
+            while((line = reader.readLine()) != null)
+            {
+                restockData.add(line);
+                if(!line.matches("Restock.+"))
+                {
+                    words = line.split(" ");
+                    if(restockers.containsKey(words[0]))
+                    {
+                        restockers.put(words[0], restockers.get(words[0]) + 1);
+                    }
+                    else
+                    {
+                        restockers.put(words[0], 1);
+                    }
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            try
+            {
+                // Close the writer regardless of what happens...
+                reader.close();
+            }
+            catch (Exception e){}
+        }
+    }
+    
     public int getRestockNumbers(String name)
     {
-        return 0;
+        return restockers.get(name);
     }
     
     public String getRestockData(int index)
     {
-        return "";
-    }
-    public void readRestockFile()
-    {
-        
+        return restockData.get(index);
     }
     
     //I'm not sure if int is what I wanna return here, but it should be fine

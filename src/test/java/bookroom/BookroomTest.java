@@ -13,6 +13,7 @@ public class BookroomTest
     private Bookshelf bookshelf;
     private Bookroom bookroom;
     private Book testBook;
+    private Analytics analyzer;
     
     @Before
     public void setUp() throws AllShelvesAreFullException, InvalidNumberException
@@ -20,6 +21,7 @@ public class BookroomTest
         testBook = new Book("Blah", "Blah", "Fiction", "Paperback", LocalDate.of(1111, 1, 1), 1.99, Criteria.NAME, 1234567890);
         bookshelf = new Bookshelf(4, "Fiction", Criteria.GENRE);
         bookroom = new Bookroom(0.4);
+        analyzer = new Analytics();
         
         bookshelf.addBook(testBook, 0);
         bookshelf.addBook(testBook, 0);
@@ -465,8 +467,9 @@ public class BookroomTest
         assertEquals(8, copies);
     }
     
+    //The z is to make these tests fire in logical order
     @Test
-    public void testBookroomNeedsRestocking()
+    public void testzBookroomNeedsRestocking()
     {
         boolean needsRestocking = false;
         Bookshelf bookshelf2 = new Bookshelf(4, "Fiction", Criteria.GENRE);
@@ -503,5 +506,21 @@ public class BookroomTest
         needsRestocking = bookroom.checkForRestock();
         
         assertFalse(needsRestocking);
+    }
+    
+    @Test
+    public void testReadRestockFile()
+    {
+        analyzer.readRestockFile();
+        assertEquals("Restock Mon 16 Dec 2019 11:24 AM", analyzer.getRestockData(0));
+    }
+    
+    //Honestly, this'll be commented out most of the time because i have to recount the stocker every time
+    //The z is because these tests run alphabetically and that's messing with the numbers
+    @Test
+    public void testzAnalyticsCountingRestockers()
+    {
+        analyzer.readRestockFile();
+        assertEquals(5, analyzer.getRestockNumbers("Carrie"));
     }
 }
