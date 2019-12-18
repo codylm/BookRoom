@@ -94,15 +94,46 @@ public class Analytics
     //saves on mental math
     public boolean checkForRestocker(String name)
     {
-        return false;
+        int restockerRestocks = 0;
+        try
+        {
+            restockerRestocks = restockers.get(name);
+        }
+        catch(NullPointerException e)
+        {
+            return false;
+        }
+        for(int value : restockers.values())
+        {
+            //an argument to be made that it should be equal to as well, but that's more
+            //personal preference than anything.
+            if(value > restockerRestocks)
+            {
+                return false;
+            }
+        }
+        return true;
     }
     
     public String findMostFrequentRestocker()
     {
-        return "";
+        String restocker = new String();
+        int mostFrequentRestocks = 0;
+        Set<String> keySet = restockers.keySet();
+        for(String key : keySet)
+        {
+            if(restockers.get(key) > mostFrequentRestocks)
+            {
+                mostFrequentRestocks = restockers.get(key);
+                restocker = new String(key);
+            }
+        }
+        
+        return restocker;
     }
     
     //Bit of a weird name, this checks for who's signalling the need for restock most often
+    //I'll have to rework the file writing a bit to make this work
     public String findMostFrequentChecker()
     {
         return "";

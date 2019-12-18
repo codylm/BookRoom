@@ -22,6 +22,7 @@ public class BookroomTest
         bookshelf = new Bookshelf(4, "Fiction", Criteria.GENRE);
         bookroom = new Bookroom(0.4);
         analyzer = new Analytics();
+        analyzer.readRestockFile();
         
         bookshelf.addBook(testBook, 0);
         bookshelf.addBook(testBook, 0);
@@ -508,19 +509,34 @@ public class BookroomTest
         assertFalse(needsRestocking);
     }
     
-    @Test
-    public void testReadRestockFile()
-    {
-        analyzer.readRestockFile();
-        assertEquals("Restock Mon 16 Dec 2019 11:24 AM", analyzer.getRestockData(0));
-    }
-    
     //Honestly, this'll be commented out most of the time because i have to recount the stocker every time
     //The z is because these tests run alphabetically and that's messing with the numbers
-    @Test
+    //@Test
     public void testzAnalyticsCountingRestockers()
     {
         analyzer.readRestockFile();
         assertEquals(5, analyzer.getRestockNumbers("Carrie"));
     }
+    
+    @Test
+    public void testzAnalyticsCheckingForRestockers()
+    {
+        boolean correctRestocker = analyzer.checkForRestocker("Carrie");
+        assertTrue(correctRestocker);
+    }
+    
+    @Test
+    public void testzPersonHasNotRestocked()
+    {
+        boolean incorrectRestocker = analyzer.checkForRestocker("Derrick");
+        assertFalse(incorrectRestocker);
+    }
+    
+    @Test
+    public void testzFindMostFrequentRestocker()
+    {
+        String restocker = analyzer.findMostFrequentRestocker();
+        assertEquals("Carrie", restocker);
+    }
+    
 }
