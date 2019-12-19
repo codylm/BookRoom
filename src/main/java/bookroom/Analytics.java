@@ -20,14 +20,20 @@ public class Analytics
     //so maybe something to shoot for down the line
     
     private Map<String, Integer> restockers;
+    private Map<String, Integer> checkers;
     private List<String> restockData;
     
     public Analytics()
     {
         restockers = new HashMap<String, Integer>();
+        checkers = new HashMap<String, Integer>();
         restockData = new ArrayList<String>();
     }
     
+    //There's something screwy going on with the read loop in here,
+    //but I can't figure out *what*. Sticking println(restockdataSize)
+    //in there shows that the loop is running way more than it should
+    //It doesn't affect the end numbers at all though, which is weird
     public void readRestockFile()
     {
         BufferedReader reader = null;
@@ -49,6 +55,18 @@ public class Analytics
                     else
                     {
                         restockers.put(words[0], 1);
+                    }
+                }
+                else if(line.matches("Restock.+"))
+                {
+                    words = line.split(" ");
+                    if(checkers.containsKey(words[1]))
+                    {
+                        checkers.put(words[1], checkers.get(words[1]) + 1);
+                    }
+                    else
+                    {
+                        checkers.put(words[1], 1);
                     }
                 }
             }
@@ -73,17 +91,24 @@ public class Analytics
         return restockers.get(name);
     }
     
+    public int getCheckerNumbers(String name)
+    {
+        return checkers.get(name);
+    }
+    
     public String getRestockData(int index)
     {
         return restockData.get(index);
     }
     
+    //!
     //I'm not sure if int is what I wanna return here, but it should be fine
     public int compareRestockDates()
     {
         return 0;
     }
     
+    //!
     public boolean checkOneDayPassed()
     {
         return false;
@@ -132,33 +157,74 @@ public class Analytics
         return restocker;
     }
     
+    public boolean checkForChecker(String name)
+    {
+        int checkerChecks = 0;
+        try
+        {
+            checkerChecks = checkers.get(name);
+        }
+        catch(NullPointerException e)
+        {
+            return false;
+        }
+        for(int value : checkers.values())
+        {
+            //an argument to be made that it should be equal to as well, but that's more
+            //personal preference than anything.
+            if(value > checkerChecks)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    
     //Bit of a weird name, this checks for who's signalling the need for restock most often
     //I'll have to rework the file writing a bit to make this work
     public String findMostFrequentChecker()
     {
-        return "";
+        String checker = new String();
+        int mostFrequentChecks = 0;
+        Set<String> keySet = checkers.keySet();
+        for(String key : keySet)
+        {
+            if(checkers.get(key) > mostFrequentChecks)
+            {
+                mostFrequentChecks = checkers.get(key);
+                checker = new String(key);
+            }
+        }
+        
+        return checker;
     }
     
+    //!
     public String checkMostFrequentDayRestocked()
     {
         return "";
     }
     
+    //!
     public String checkMostFrequentMonthRestocked()
     {
         return "";
     }
     
+    
+    //!
     public String checkMostFrequentDayNeedingRestock()
     {
         return "";
     }
     
+    //!
     public String checkMostFrequentMonthNeedingRestock()
     {
         return "";
     }
     
+    //!
     //not sure about the return type here either yet, need to look into how this
     //kinda thing is done
     public int findAverageRestockSignalTime()
@@ -166,13 +232,30 @@ public class Analytics
         return 0;
     }
     
+    //!
     public int findAverageRoomRestockedTime()
     {
         return 0;
     }
     
+    //!!!
     public int findTotalNumberOfRestocks()
     {
-        return 0;
+        int restocks = 0;
+        for(int value : restockers.values())
+        {
+            restocks += value;
+        }
+        return restocks;
     }
+    
+    public int findTotalNumberOfChecks()
+    {
+        int checks = 0;
+        for(int value : checkers.values())
+        {
+            checks += value;
+        }
+        return checks;
+    }    
 }

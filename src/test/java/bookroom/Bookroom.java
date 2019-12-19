@@ -107,7 +107,7 @@ public class Bookroom
         return copies;
     }
     
-    public boolean checkForRestock()
+    public boolean checkForRestock(String name)
     {
         double percent = 0.0;
         int numOfShelves = shelves.size();
@@ -132,7 +132,7 @@ public class Bookroom
                 File logFile = new File("RestockData.txt");
 
                 writer = new BufferedWriter(new FileWriter(logFile, true));
-                writer.write("Restock " + timeLog + "\n");
+                writer.write("Restock " + name + " " + timeLog + "\n");
             }
             catch (Exception e)
             {

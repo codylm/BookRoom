@@ -484,7 +484,7 @@ public class BookroomTest
         bookroom.getShelf(0).setRestock();
         bookroom.getShelf(1).setRestock();
         
-        needsRestocking = bookroom.checkForRestock();
+        needsRestocking = bookroom.checkForRestock("Carlos");
         assertTrue(needsRestocking);
     }
     
@@ -504,7 +504,7 @@ public class BookroomTest
         bookroom.getShelf(1).setRestock();
         
         bookroom.signalRestock("Carrie");
-        needsRestocking = bookroom.checkForRestock();
+        needsRestocking = bookroom.checkForRestock("Carlos");
         
         assertFalse(needsRestocking);
     }
@@ -514,7 +514,6 @@ public class BookroomTest
     //@Test
     public void testzAnalyticsCountingRestockers()
     {
-        analyzer.readRestockFile();
         assertEquals(5, analyzer.getRestockNumbers("Carrie"));
     }
     
@@ -539,4 +538,39 @@ public class BookroomTest
         assertEquals("Carrie", restocker);
     }
     
+    //This'll be commented out most of the time because the numbers
+    //in the file change every time I run it
+    //@Test
+    public void testzAnalyticsCountingCheckers()
+    {
+        assertEquals(5, analyzer.getCheckerNumbers("Carlos"));
+    }
+    
+    @Test
+    public void testzAnalyticsCheckingForCheckers()
+    {
+        boolean correctChecker = analyzer.checkForChecker("Carlos");
+        assertTrue(correctChecker);
+    }
+    
+    @Test
+    public void testzFindMostFrequentChecker()
+    {
+        String checker = analyzer.findMostFrequentChecker();
+        assertEquals("Carlos", checker);
+    }
+    
+    //@Test
+    public void testzGetTotalRestocks()
+    {
+        int totalRestocks = analyzer.findTotalNumberOfRestocks();
+        assertEquals(13, totalRestocks);
+    }
+    
+    //@Test
+    public void testzGetTotalChecks()
+    {
+        int totalChecks = analyzer.findTotalNumberOfChecks();
+        assertEquals(15, totalChecks);
+    }
 }
