@@ -573,4 +573,38 @@ public class BookroomTest
         int totalChecks = analyzer.findTotalNumberOfChecks();
         assertEquals(15, totalChecks);
     }
+    
+    @Test
+    public void testzCheckOneDayPassed()
+    {
+        assertTrue(analyzer.checkOneDayPassed(0, 1));
+    }
+    
+    @Test
+    public void testzFindMostFrequentDayRestock()
+    {
+        String day = analyzer.checkMostFrequentDayRestocked();
+        assertEquals("Fri", day);
+    }
+    
+    @Test
+    public void testzFindMostFrequentMonthRestock()
+    {
+        String month = analyzer.checkMostFrequentMonthRestocked();
+        assertEquals("Dec", month);
+    }
+    
+    @Test
+    public void testzFindMostFrequentDayCheck()
+    {
+        String day = analyzer.checkMostFrequentDayChecked();
+        assertEquals("Fri", day);
+    }
+    
+    @Test
+    public void testzFindMostFrequentMonthCheck()
+    {
+        String month = analyzer.checkMostFrequentMonthChecked();
+        assertEquals("Dec", month);
+    }
 }

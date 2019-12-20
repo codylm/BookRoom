@@ -21,6 +21,10 @@ public class Analytics
     
     private Map<String, Integer> restockers;
     private Map<String, Integer> checkers;
+    private Map<String, Integer> restockDays;
+    private Map<String, Integer> restockMonths;
+    private Map<String, Integer> checkDays;
+    private Map<String, Integer> checkMonths;
     private List<String> restockData;
     
     public Analytics()
@@ -28,6 +32,10 @@ public class Analytics
         restockers = new HashMap<String, Integer>();
         checkers = new HashMap<String, Integer>();
         restockData = new ArrayList<String>();
+        restockDays = new HashMap<String, Integer>();
+        restockMonths = new HashMap<String, Integer>();
+        checkDays = new HashMap<String, Integer>();
+        checkMonths = new HashMap<String, Integer>();
     }
     
     //There's something screwy going on with the read loop in here,
@@ -56,6 +64,24 @@ public class Analytics
                     {
                         restockers.put(words[0], 1);
                     }
+                    
+                    if(restockDays.containsKey(words[1]))
+                    {
+                        restockDays.put(words[1], restockDays.get(words[1]) + 1);
+                    }
+                    else
+                    {
+                        restockDays.put(words[1], 1);
+                    }
+                    
+                    if(restockMonths.containsKey(words[3]))
+                    {
+                        restockMonths.put(words[3], restockMonths.get(words[3]) + 1);
+                    }
+                    else
+                    {
+                        restockMonths.put(words[3], 1);
+                    }
                 }
                 else if(line.matches("Restock.+"))
                 {
@@ -67,6 +93,24 @@ public class Analytics
                     else
                     {
                         checkers.put(words[1], 1);
+                    }
+                    
+                    if(checkDays.containsKey(words[2]))
+                    {
+                        checkDays.put(words[2], checkDays.get(words[2]) + 1);
+                    }
+                    else
+                    {
+                        checkDays.put(words[2], 1);
+                    }
+                    
+                    if(checkMonths.containsKey(words[4]))
+                    {
+                        checkMonths.put(words[4], checkMonths.get(words[4]) + 1);
+                    }
+                    else
+                    {
+                        checkMonths.put(words[4], 1);
                     }
                 }
             }
@@ -108,10 +152,13 @@ public class Analytics
         return 0;
     }
     
-    //!
-    public boolean checkOneDayPassed()
+    //This could probably be made to specifically check for a 24
+    //hour period, but this works for basic functionality
+    public boolean checkOneDayPassed(int indexOne, int indexTwo)
     {
-        return false;
+        String[] checkLine = restockData.get(indexOne).split(" ");
+        String[] restockLine = restockData.get(indexTwo).split(" ");
+        return(!checkLine[2].equals(restockLine[1]));
     }
     
     //I'm not sure if this is better than just letting a person check restock
@@ -199,29 +246,72 @@ public class Analytics
         return checker;
     }
     
-    //!
     public String checkMostFrequentDayRestocked()
     {
-        return "";
+        String day = new String();
+        int mostFrequentDay = 0;
+        Set<String> keySet = restockDays.keySet();
+        for(String key : keySet)
+        {
+            if(restockDays.get(key) > mostFrequentDay)
+            {
+                mostFrequentDay = restockDays.get(key);
+                day = new String(key);
+            }
+        }
+        
+        return day;
     }
     
-    //!
     public String checkMostFrequentMonthRestocked()
     {
-        return "";
+        String month = new String();
+        int mostFrequentMonth = 0;
+        Set<String> keySet = restockMonths.keySet();
+        for(String key : keySet)
+        {
+            if(restockMonths.get(key) > mostFrequentMonth)
+            {
+                mostFrequentMonth = restockMonths.get(key);
+                month = new String(key);
+            }
+        }
+        
+        return month;
     }
     
-    
-    //!
-    public String checkMostFrequentDayNeedingRestock()
+    public String checkMostFrequentDayChecked()
     {
-        return "";
+        String day = new String();
+        int mostFrequentDay = 0;
+        Set<String> keySet = checkDays.keySet();
+        for(String key : keySet)
+        {
+            if(checkDays.get(key) > mostFrequentDay)
+            {
+                mostFrequentDay = checkDays.get(key);
+                day = new String(key);
+            }
+        }
+        
+        return day;
     }
     
-    //!
-    public String checkMostFrequentMonthNeedingRestock()
+    public String checkMostFrequentMonthChecked()
     {
-        return "";
+        String month = new String();
+        int mostFrequentMonth = 0;
+        Set<String> keySet = checkMonths.keySet();
+        for(String key : keySet)
+        {
+            if(checkMonths.get(key) > mostFrequentMonth)
+            {
+                mostFrequentMonth = checkMonths.get(key);
+                month = new String(key);
+            }
+        }
+        
+        return month;
     }
     
     //!
@@ -238,7 +328,6 @@ public class Analytics
         return 0;
     }
     
-    //!!!
     public int findTotalNumberOfRestocks()
     {
         int restocks = 0;
