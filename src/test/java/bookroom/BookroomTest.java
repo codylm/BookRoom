@@ -607,4 +607,21 @@ public class BookroomTest
         String month = analyzer.checkMostFrequentMonthChecked();
         assertEquals("Dec", month);
     }
+    
+    @Test
+    public void testzFindAverageRestockSignalTime()
+    {
+        String time = analyzer.findAverageRestockSignalTime();
+        assertEquals("2:45", time);
+    }
+    
+    //Yeah ima be honest, because my room gets signalled and restocked
+    //at the same time every time, these two tests are gonna
+    //be the same
+    @Test
+    public void testzFindAverageRestockTime()
+    {
+        String time = analyzer.findAverageRoomRestockedTime();
+        assertEquals("2:45", time);
+    }
 }

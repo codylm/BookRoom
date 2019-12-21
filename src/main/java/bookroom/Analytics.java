@@ -1,6 +1,7 @@
 package bookroom;
 
 import java.io.*;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -143,13 +144,6 @@ public class Analytics
     public String getRestockData(int index)
     {
         return restockData.get(index);
-    }
-    
-    //!
-    //I'm not sure if int is what I wanna return here, but it should be fine
-    public int compareRestockDates()
-    {
-        return 0;
     }
     
     //This could probably be made to specifically check for a 24
@@ -317,15 +311,65 @@ public class Analytics
     //!
     //not sure about the return type here either yet, need to look into how this
     //kinda thing is done
-    public int findAverageRestockSignalTime()
+    public String findAverageRestockSignalTime()
     {
-        return 0;
+        DecimalFormat f = new DecimalFormat("##.##");
+        int index = 0;
+        double average = 0;
+        double count = 0;
+        String[] data = new String[10];
+        while(index < restockData.size())
+        {
+            data = restockData.get(index).split(" ");
+            Double hour = Double.parseDouble(data[6]);
+            Double min = Double.parseDouble(data[7]);
+            min = min / 60; //this'll be where everything screws up, i bet
+            average += (hour + min);
+            count++;
+            index += 2;
+        }
+        
+        average = average / count;
+        
+        int wholeNumber = (int) average; //i need the whole number portion of the average, here
+        double minute = average - (double) wholeNumber;
+        
+        minute *= 60; //dunno if I need to move the decimal here or not
+
+        String averageTime = new String(Integer.toString(wholeNumber) + ":" + Integer.toString((int)minute));
+        
+        return averageTime;
     }
     
     //!
-    public int findAverageRoomRestockedTime()
+    public String findAverageRoomRestockedTime()
     {
-        return 0;
+        DecimalFormat f = new DecimalFormat("##.##");
+        int index = 1;
+        double average = 0;
+        double count = 0;
+        String[] data = new String[10];
+        while(index < restockData.size())
+        {
+            data = restockData.get(index).split(" ");
+            Double hour = Double.parseDouble(data[5]);
+            Double min = Double.parseDouble(data[6]);
+            min = min / 60; //this'll be where everything screws up, i bet
+            average += (hour + min);
+            count++;
+            index += 2;
+        }
+        
+        average = average / count;
+        
+        int wholeNumber = (int) average; //i need the whole number portion of the average, here
+        double minute = average - (double) wholeNumber;
+        
+        minute *= 60; //dunno if I need to move the decimal here or not
+
+        String averageTime = new String(Integer.toString(wholeNumber) + ":" + Integer.toString((int)minute));
+        
+        return averageTime;
     }
     
     public int findTotalNumberOfRestocks()
