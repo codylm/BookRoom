@@ -504,7 +504,7 @@ public class BookroomTest
         bookroom.getShelf(1).setRestock();
         
         bookroom.signalRestock("Carrie");
-        needsRestocking = bookroom.checkForRestock("Carlos");
+        needsRestocking = bookroom.checkForRestock("Carlos"); //this shouldn't write to the file
         
         assertFalse(needsRestocking);
     }
@@ -623,5 +623,30 @@ public class BookroomTest
     {
         String time = analyzer.findAverageRoomRestockedTime();
         assertEquals("2:45", time);
+    }
+    
+    @Test
+    public void testzGetGrossRevenueFromRestockSignal()
+    {
+        Bookshelf bookshelf2 = new Bookshelf(4, "Fiction", Criteria.GENRE);
+        Bookshelf bookshelf3 = new Bookshelf(4, "Fiction", Criteria.GENRE);
+        Bookshelf bookshelf4 = new Bookshelf(4, "Fiction", Criteria.GENRE);
+        Bookshelf bookshelf5 = new Bookshelf(4, "Fiction", Criteria.GENRE);
+        bookroom.addShelf(1, bookshelf2);
+        bookroom.addShelf(2, bookshelf3);
+        bookroom.addShelf(3, bookshelf4);
+        bookroom.addShelf(4, bookshelf5);
+        bookroom.getShelf(0).setRestock();
+        bookroom.getShelf(1).setRestock();
+        
+        bookroom.removeFirstInstanceOfBook(testBook);
+        bookroom.removeFirstInstanceOfBook(testBook);
+        bookroom.removeFirstInstanceOfBook(testBook);
+        
+        boolean dummy = bookroom.checkForRestock("Carlos");
+        Analytics dummyAnalyzer = new Analytics();
+        dummyAnalyzer.readRestockFile();
+        double revenue = dummyAnalyzer.getGrossRevenue(4);
+        assertEquals(5.97, revenue, 0.0);
     }
 }

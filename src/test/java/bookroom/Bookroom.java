@@ -8,6 +8,7 @@ public class Bookroom
 {
     private Map<Integer, Bookshelf> shelves;
     private double percentRestock;
+    private double cycleRevenue;
     private boolean needsRestock;
     
     public Bookroom(double percentRestock)
@@ -132,7 +133,7 @@ public class Bookroom
                 File logFile = new File("RestockData.txt");
 
                 writer = new BufferedWriter(new FileWriter(logFile, true));
-                writer.write("Restock " + name + " " + timeLog + "\n");
+                writer.write("Restock " + name + " " + timeLog + " " + cycleRevenue + "\n");
             }
             catch (Exception e)
             {
@@ -144,6 +145,7 @@ public class Bookroom
                 {
                     // Close the writer regardless of what happens...
                     writer.close();
+                    cycleRevenue = 0;
                 }
                 catch (Exception e){}
             }
@@ -182,6 +184,23 @@ public class Bookroom
                 writer.close();
             }
             catch (Exception e){}
+        }
+    }
+    
+    public void removeFirstInstanceOfBook(Book book)
+    {
+        outerloop:
+        for(Bookshelf value : shelves.values())
+        {
+            for(int i = 0; i < value.getNumOfShelves(); i++)
+            {
+                if(value.getSingularShelf(i).contains(book))
+                {
+                    Book removedBook = value.removeBook(book, i);
+                    cycleRevenue += removedBook.getPrice();
+                    break outerloop;
+                }
+            }
         }
     }
 }

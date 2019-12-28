@@ -163,6 +163,14 @@ public class Bookshelf
         }
     }
     
+    //probably need to refactor this to be less crappy at some point,
+    //considering it's kinda circular...
+    public Book removeBook(Book book, int shelf)
+    {
+        int index = shelves.get(shelf).indexOf(book);
+        return shelves.get(shelf).get(index);
+    }
+    
     //The reasoning being that the odds of two books with the same name and author are incredibly small;
     //need to look into how these things are tracked in real life and overhaul it to that though.
     //it's hard to say what kind of search should be used because there's every chance that the shelf won't
@@ -326,5 +334,17 @@ public class Bookshelf
         {
             sortSingularShelf(i);
         }
+    }
+    
+    public int findPositionOfBook(Book book)
+    {
+        for(int i = 0; i < shelves.size(); i++)
+        {
+            if(shelves.get(i).contains(book))
+            {
+                return i; //Could possibly use indexOf here, but...
+            }
+        }
+        return -1;
     }
 }

@@ -390,5 +390,12 @@ public class Analytics
             checks += value;
         }
         return checks;
-    }    
+    }
+    
+    public double getGrossRevenue(int restockNum)
+    {
+        String[] data = restockData.get(restockNum).split(" ");
+        double revenue = Double.valueOf(data[9]);
+        return revenue;
+    }
 }
