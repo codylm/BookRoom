@@ -4,14 +4,14 @@ import java.util.*;
 import java.io.*;
 import java.text.SimpleDateFormat;
 
-public class Bookroom
+public class BookshelfGroup
 {
     private Map<Integer, Bookshelf> shelves;
     private double percentRestock;
     private double cycleRevenue;
     private boolean needsRestock;
     
-    public Bookroom(double percentRestock)
+    public BookshelfGroup(double percentRestock)
     {
         shelves = new HashMap<Integer, Bookshelf>();
         this.percentRestock = percentRestock;
@@ -98,6 +98,7 @@ public class Bookroom
     }*/
     
     //not sure if this should take a book or an isbn
+    //probably need to rework this to an isbn
     public int getNumCopiesOfBook(Book book)
     {
         int copies = 0;

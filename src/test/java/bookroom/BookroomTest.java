@@ -11,7 +11,7 @@ public class BookroomTest
 {
     
     private Bookshelf bookshelf;
-    private Bookroom bookroom;
+    private BookshelfGroup bookroom;
     private Book testBook;
     private Analytics analyzer;
     
@@ -20,7 +20,7 @@ public class BookroomTest
     {
         testBook = new Book("Blah", "Blah", "Fiction", "Paperback", LocalDate.of(1111, 1, 1), 1.99, Criteria.NAME, 1234567890);
         bookshelf = new Bookshelf(4, "Fiction", Criteria.GENRE);
-        bookroom = new Bookroom(0.4);
+        bookroom = new BookshelfGroup(0.4);
         analyzer = new Analytics();
         analyzer.readRestockFile();
         
