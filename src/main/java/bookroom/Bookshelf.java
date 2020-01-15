@@ -37,6 +37,7 @@ public class Bookshelf
     //!!!consider changing if to < 1 because every bookshelf should have at least 1 shelf
     //!!!needs to take shelf booleans into account when adding or removing shelves (list?)
     //not gonna lie, i don't remember what this second reminder meant by shelf booleans
+    //this probably needs to be changed to add new shelves, but... idk
     public void setNumOfShelves(int newNum) throws InvalidNumberException
     {
         if(newNum < 0)

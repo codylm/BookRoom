@@ -12,12 +12,15 @@ public class Bookroom extends JFrame
 {
     
     JComboBox bookroomBox, percentBox;
-    JTextField isbnField;
+    JTextField isbnField, shelvesField, shelvesField2;
     JButton addButton, selectButton, percentButton, infoButton, criteriaButton,
             findFirstShelfButton, findNumCopiesButton, checkRestockButton,
-            signalRestockButton, removeBookButton; //not sure about selecting but w/e i'll work on it
-    JLabel bookshelvesLabel, selectedLabel, revenueLabel, percentLabel, isbnLabel,
-           restockLabel;
+            signalRestockButton, removeBookButton, changeCriteriaButton, changeCriteriaTypeButton,
+            contentsOfShelfButton, booksOnShelfButton, getShelfIsFullButton, toggleShelfFullButton,
+            addBookButton, getSpecificShelfButton, allWrongBooksButton, copiesOfBookButton,
+            sortShelfButton; //not sure about selecting but w/e i'll work on it
+    JLabel bookshelvesLabel, selectedLabel, percentLabel, isbnLabel,
+           restockLabel, shelvesLabel, shelvesLabel2;
     
     public static void main(String[] args)
     {
@@ -82,8 +85,41 @@ public class Bookroom extends JFrame
         
         addComp(thePanel, shelfPanel, 0, 0, 1, 1, GridBagConstraints.NORTH, GridBagConstraints.NONE);
 
-        revenueLabel = new JLabel("Current Revenue: $00.00");
-        addComp(thePanel, revenueLabel, 0, 1, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+        JPanel selectedPanel = new JPanel();
+        Border selectedBorder = BorderFactory.createTitledBorder("Selected Bookshelf");
+        selectedPanel.setBorder(selectedBorder);
+        selectedPanel.setLayout(new GridBagLayout());
+        
+        changeCriteriaButton = new JButton("Change Main Classification");
+        addComp(selectedPanel, changeCriteriaButton, 0, 0, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+        changeCriteriaTypeButton = new JButton("Change Sub-Classification");
+        addComp(selectedPanel, changeCriteriaTypeButton, 1, 0, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+        shelvesLabel = new JLabel("Shelf #: ");
+        addComp(selectedPanel, shelvesLabel, 2, 0, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+        shelvesField = new JTextField(2);
+        addComp(selectedPanel, shelvesField, 2, 0, 1, 1, GridBagConstraints.EAST, GridBagConstraints.NONE);
+        contentsOfShelfButton = new JButton("Get Books on Given Shelf");
+        addComp(selectedPanel, contentsOfShelfButton, 3, 0, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+        
+        booksOnShelfButton = new JButton("# of Books on Shelf");
+        addComp(selectedPanel, booksOnShelfButton, 0, 1, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+        getShelfIsFullButton = new JButton("Check if Shelf is Full");
+        addComp(selectedPanel, getShelfIsFullButton, 1, 1, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+        toggleShelfFullButton = new JButton("Mark Shelf as Full/Not Full");
+        addComp(selectedPanel, toggleShelfFullButton, 2, 1, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+        addBookButton = new JButton("Add Book to Shelf");
+        addComp(selectedPanel, addBookButton, 3, 1, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+
+        getSpecificShelfButton = new JButton("Get Contents of Single Shelf");
+        addComp(selectedPanel, getSpecificShelfButton, 0, 2, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+        allWrongBooksButton = new JButton("Find Incorrect Books");
+        addComp(selectedPanel, allWrongBooksButton, 1, 2, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+        copiesOfBookButton = new JButton("Find All Copies of Book");
+        addComp(selectedPanel, copiesOfBookButton, 2, 2, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+        sortShelfButton = new JButton("Sort Shelf");
+        addComp(selectedPanel, sortShelfButton, 3, 2, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+        
+        addComp(thePanel, selectedPanel, 0, 1, 1, 1, GridBagConstraints.NORTH, GridBagConstraints.NONE);
         
         this.add(thePanel);
         this.pack();
