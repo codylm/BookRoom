@@ -12,15 +12,20 @@ public class Bookroom extends JFrame
 {
     
     JComboBox bookroomBox, percentBox;
-    JTextField isbnField, shelvesField, shelvesField2;
+    JTextField isbnField, shelvesField, shelvesField2, nameField, revenueField;
     JButton addButton, selectButton, percentButton, infoButton, criteriaButton,
             findFirstShelfButton, findNumCopiesButton, checkRestockButton,
-            signalRestockButton, removeBookButton, changeCriteriaButton, changeCriteriaTypeButton,
-            contentsOfShelfButton, booksOnShelfButton, getShelfIsFullButton, toggleShelfFullButton,
-            addBookButton, getSpecificShelfButton, allWrongBooksButton, copiesOfBookButton,
-            sortShelfButton; //not sure about selecting but w/e i'll work on it
+            signalRestockButton, removeBookButton, totalRestocksButton,
+            totalChecksButton, getRevenueButton;
+    JButton changeCriteriaButton, changeCriteriaTypeButton, contentsOfShelfButton,
+            booksOnShelfButton, getShelfIsFullButton, toggleShelfFullButton, addBookButton,
+            getSpecificShelfButton, allWrongBooksButton, copiesOfBookButton, sortShelfButton; //not sure about selecting but w/e i'll work on it
+    JButton readFileButton, restockerButton, checkerButton, checkRestockerButton, checkCheckerButton,
+            frequentRestockerButton, frequentCheckerButton, frequentRestockDayButton,
+            frequentRestockMonthButton, frequentCheckDayButton, frequentCheckMonthButton,
+            averageRestockButton, averageCheckButton;
     JLabel bookshelvesLabel, selectedLabel, percentLabel, isbnLabel,
-           restockLabel, shelvesLabel, shelvesLabel2;
+           restockLabel, shelvesLabel, shelvesLabel2, nameLabel, revenueLabel;
     
     public static void main(String[] args)
     {
@@ -120,6 +125,61 @@ public class Bookroom extends JFrame
         addComp(selectedPanel, sortShelfButton, 3, 2, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
         
         addComp(thePanel, selectedPanel, 0, 1, 1, 1, GridBagConstraints.NORTH, GridBagConstraints.NONE);
+        
+        JPanel analyticsPanel = new JPanel();
+        Border analyticsBorder = BorderFactory.createTitledBorder("Analytics");
+        analyticsPanel.setBorder(analyticsBorder);
+        analyticsPanel.setLayout(new GridBagLayout());
+        
+        readFileButton = new JButton("Read Restock File");
+        addComp(analyticsPanel, readFileButton, 0, 0, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+        nameLabel = new JLabel("Name: ");
+        addComp(analyticsPanel, nameLabel, 1, 0, 1, 1, GridBagConstraints.EAST, GridBagConstraints.NONE);
+        nameField = new JTextField(15);
+        addComp(analyticsPanel, nameField, 2, 0, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+        
+
+        restockerButton = new JButton("Restocker Numbers");
+        addComp(analyticsPanel, restockerButton, 0, 1, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+        checkerButton = new JButton("Checker Numbers");
+        addComp(analyticsPanel, checkerButton, 1, 1, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+        checkRestockerButton = new JButton("Check For Restocker");
+        addComp(analyticsPanel, checkRestockerButton, 2, 1, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+        checkCheckerButton = new JButton("Check for Checker");
+        addComp(analyticsPanel, checkCheckerButton, 3, 1, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+        
+        frequentRestockerButton = new JButton("Most Frequent Restocker");
+        addComp(analyticsPanel, frequentRestockerButton, 0, 2, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+        frequentCheckerButton = new JButton("Most Frequent Checker");
+        addComp(analyticsPanel, frequentCheckerButton, 1, 2, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+        averageRestockButton = new JButton("Get Average Restock Time");
+        addComp(analyticsPanel, averageRestockButton, 2, 2, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+        averageCheckButton = new JButton("Get Average Check Time");
+        addComp(analyticsPanel, averageCheckButton, 3, 2, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+        
+        
+        frequentRestockDayButton = new JButton("Most Frequent Restock Day");
+        addComp(analyticsPanel, frequentRestockDayButton, 0, 3, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+        frequentRestockMonthButton = new JButton("Most Frequent Restock Month");
+        addComp(analyticsPanel, frequentRestockMonthButton, 1, 3, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+        frequentCheckDayButton = new JButton("Most Frequent Check Day");
+        addComp(analyticsPanel, frequentCheckDayButton, 2, 3, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+        frequentCheckMonthButton = new JButton("Most Frequent Check Month");
+        addComp(analyticsPanel, frequentCheckMonthButton, 3, 3, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+        
+        totalRestocksButton = new JButton("Most Frequent Restock Day");
+        addComp(analyticsPanel, totalRestocksButton, 0, 4, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+        totalChecksButton = new JButton("Most Frequent Restock Month");
+        addComp(analyticsPanel, totalChecksButton, 1, 4, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+        //not sure about these two things, but
+        revenueLabel = new JLabel("Get Specific Restock:");
+        addComp(analyticsPanel, revenueLabel, 2, 4, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+        revenueField = new JTextField(2);
+        addComp(analyticsPanel, revenueField, 2, 4, 1, 1, GridBagConstraints.EAST, GridBagConstraints.NONE);
+        getRevenueButton = new JButton("Retrieve Revenue");
+        addComp(analyticsPanel, getRevenueButton, 3, 4, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+        
+        addComp(thePanel, analyticsPanel, 0, 2, 1, 1, GridBagConstraints.NORTH, GridBagConstraints.NONE);
         
         this.add(thePanel);
         this.pack();
