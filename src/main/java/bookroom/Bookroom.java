@@ -1,5 +1,7 @@
 package bookroom;
 
+import java.util.*;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 
@@ -27,6 +29,12 @@ public class Bookroom extends JFrame
     JLabel bookshelvesLabel, selectedLabel, percentLabel, isbnLabel,
            restockLabel, shelvesLabel, shelvesLabel2, nameLabel, revenueLabel;
     
+    private BookshelfGroup bookroom = new BookshelfGroup(0.4);
+    private Bookshelf selectedShelf;
+    private Analytics analyzer = new Analytics();
+    private int bookshelfNum = 0;
+    private String bookshelfInfo = "";
+    
     public static void main(String[] args)
     {
         new Bookroom();
@@ -45,24 +53,29 @@ public class Bookroom extends JFrame
         Border shelfBorder = BorderFactory.createTitledBorder("Bookshelves");
         shelfPanel.setBorder(shelfBorder);
         shelfPanel.setLayout(new GridBagLayout());
+       
+        ListenForButtons lForButtons = new ListenForButtons();
 
         //Debug
-        String[] placeholders = {"Bookshelf 1", "Bookshelf 2", "Bookshelf 3"};
-        bookroomBox = new JComboBox(placeholders);
+        bookroomBox = new JComboBox();
         addComp(shelfPanel, bookroomBox, 0, 0, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
         addButton = new JButton("Add New Bookshelf");
+        addButton.addActionListener(lForButtons);
         addComp(shelfPanel, addButton, 1, 0, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
         selectButton = new JButton("Select Bookshelf");
+        selectButton.addActionListener(lForButtons);
         addComp(shelfPanel, selectButton, 2, 0, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
         
-        selectedLabel = new JLabel("Selected: Bookshelf 1"); //selected bookshelf is placeholder
+        selectedLabel = new JLabel("Selected: "); //selected bookshelf is placeholder
         addComp(shelfPanel, selectedLabel, 0, 1, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
         infoButton = new JButton("Get Shelf Info");
+        infoButton.addActionListener(lForButtons);
         addComp(shelfPanel, infoButton, 1, 1, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
         criteriaButton = new JButton("Get All Shelf Classifications");
+        criteriaButton.addActionListener(lForButtons);
         addComp(shelfPanel, criteriaButton, 2, 1, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
 
-        isbnLabel = new JLabel("ISBN of Book:");
+        isbnLabel = new JLabel("ISBN of Book: ");
         addComp(shelfPanel, isbnLabel, 0, 2, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
         isbnField = new JTextField(8);
         addComp(shelfPanel, isbnField, 0, 2, 1, 1, GridBagConstraints.EAST, GridBagConstraints.NONE);
@@ -201,5 +214,59 @@ public class Bookroom extends JFrame
         gridConstraints.fill = stretch;
         
         thePanel.add(comp, gridConstraints);
+    }
+    
+    private class ListenForButtons implements ActionListener
+    {
+        public void actionPerformed(ActionEvent e)
+        {
+            if(e.getSource() == addButton)
+            {
+                Bookshelf shelf = new Bookshelf(4, "Fiction", Criteria.GENRE);
+                bookroomBox.addItem(shelf);
+                bookroom.addShelf(bookshelfNum, shelf);
+                bookshelfNum++;
+                if(selectedShelf == null)
+                {
+                    selectedShelf = shelf; //i think this works because reference variables?
+                    selectedLabel.setText("Selected: " + selectedShelf.toString());
+                }
+            }
+            //do I even need this with getSelectedItem being a thing?
+            else if(e.getSource() == selectButton)
+            {
+                selectedShelf = (Bookshelf)bookroomBox.getSelectedItem();
+                selectedLabel.setText("Selected: " + selectedShelf.toString());
+            }
+            else if(e.getSource() == infoButton)
+            {
+                if(selectedShelf != null)
+                {
+                    bookshelfInfo += "Num of Shelves: " + selectedShelf.getNumOfShelves() + "\n";
+                    bookshelfInfo += "Classification: " + selectedShelf.getCriteria() + "\n";
+                    bookshelfInfo += "Sub-Classification: " + selectedShelf.getCriteriaType() + "\n";
+                    bookshelfInfo += "Number of Books: " + selectedShelf.getNumBooksOnShelves() + "\n";
+                    bookshelfInfo += "Needs Restocking: " + selectedShelf.getRestock() + "\n";
+                    bookshelfInfo += "Potential Gross Revenue: " + selectedShelf.getGrossRevenue() + "\n";
+                    
+                    JOptionPane.showMessageDialog(Bookroom.this, bookshelfInfo, "Shelf Info", JOptionPane.INFORMATION_MESSAGE);
+                    bookshelfInfo = "";
+                }
+            }
+            else if(e.getSource() == criteriaButton)
+            {
+                List<Criteria> criteria = bookroom.getAllShelfCriteria();
+                List<String> criteriaTypes = bookroom.getAllShelfCriteriaTypes();
+                
+                for(int i = 0; i < criteria.size(); i++)
+                {
+                    bookshelfInfo += criteria.get(i).name() + " - " + criteriaTypes.get(i) + "\n";
+                }
+                
+                JOptionPane.showMessageDialog(Bookroom.this, bookshelfInfo, "Shelf Info", JOptionPane.INFORMATION_MESSAGE);
+                bookshelfInfo = "";
+            }
+        }
+        
     }
 }
