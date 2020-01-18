@@ -79,12 +79,13 @@ public class Bookroom extends JFrame
         addComp(shelfPanel, isbnLabel, 0, 2, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
         isbnField = new JTextField(8);
         addComp(shelfPanel, isbnField, 0, 2, 1, 1, GridBagConstraints.EAST, GridBagConstraints.NONE);
-        percentLabel = new JLabel("Current Percent: 100%");
+        percentLabel = new JLabel("Current Percent: " + bookroom.getPercentRestock());
         addComp(shelfPanel, percentLabel, 1, 2, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
-        String[] percents = {"10%", "20%", "30%", "40%", "50%", "60%", "70%", "80%", "90%", "100%"};
+        String[] percents = {"0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7", "0.8", "0.9", "1"};
         percentBox = new JComboBox(percents);
         addComp(shelfPanel, percentBox, 1, 2, 1, 1, GridBagConstraints.EAST, GridBagConstraints.NONE);
         percentButton = new JButton("Set Restock Percent");
+        percentButton.addActionListener(lForButtons);
         addComp(shelfPanel, percentButton, 2, 2, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
         
         removeBookButton = new JButton("Remove First Instance of Book");
@@ -126,6 +127,7 @@ public class Bookroom extends JFrame
         toggleShelfFullButton = new JButton("Mark Shelf as Full/Not Full");
         addComp(selectedPanel, toggleShelfFullButton, 2, 1, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
         addBookButton = new JButton("Add Book to Shelf");
+        addBookButton.addActionListener(lForButtons);
         addComp(selectedPanel, addBookButton, 3, 1, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
 
         getSpecificShelfButton = new JButton("Get Contents of Single Shelf");
@@ -266,7 +268,98 @@ public class Bookroom extends JFrame
                 JOptionPane.showMessageDialog(Bookroom.this, bookshelfInfo, "Shelf Info", JOptionPane.INFORMATION_MESSAGE);
                 bookshelfInfo = "";
             }
+            else if(e.getSource() == percentButton)
+            {
+                String stringPercent = percentBox.getSelectedItem().toString();
+                double percent = Double.parseDouble(stringPercent);
+                bookroom.setPercentRestock(percent);
+                percentLabel.setText("Current Percent: " + bookroom.getPercentRestock());
+            }
+            else if(e.getSource() == addBookButton)
+            {
+                new BookFrame();
+            }
         }
         
+    }
+    
+    private class BookFrame extends JFrame
+    {
+        JLabel nameLabel, authorLabel, genreLabel, coverLabel,
+               dateLabel, priceLabel, criteriaLabel, isbLabel;
+        JTextField nameField, authorField, genreField, coverField,
+                   dateField, priceField, criteriaField, isbField;
+        JButton addButton, cancelButton;
+        
+        private BookFrame()
+        {
+            this.setSize(400, 400);
+            this.setLocationRelativeTo(null);
+            this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            this.setTitle("Add New Book");
+            JPanel bookPanel = new JPanel();
+            bookPanel.setLayout(new GridBagLayout());
+            
+            nameLabel = new JLabel("Name: ");
+            addComp(bookPanel, nameLabel, 0, 0, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+            nameField = new JTextField(15);
+            addComp(bookPanel, nameField, 1, 0, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+            
+            authorLabel = new JLabel("Author: ");
+            addComp(bookPanel, authorLabel, 0, 1, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+            authorField = new JTextField(15);
+            addComp(bookPanel, authorField, 1, 1, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+            
+            genreLabel = new JLabel("Genre: ");
+            addComp(bookPanel, genreLabel, 0, 2, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+            genreField = new JTextField(15);
+            addComp(bookPanel, genreField, 1, 2, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+            
+            coverLabel = new JLabel("Cover: ");
+            addComp(bookPanel, coverLabel, 0, 3, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+            coverField = new JTextField(15);
+            addComp(bookPanel, coverField, 1, 3, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+            
+            dateLabel = new JLabel("Date: ");
+            addComp(bookPanel, dateLabel, 0, 4, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+            dateField = new JTextField(15);
+            addComp(bookPanel, dateField, 1, 4, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+            
+            priceLabel = new JLabel("Price: ");
+            addComp(bookPanel, priceLabel, 0, 5, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+            priceField = new JTextField(15);
+            addComp(bookPanel, priceField, 1, 5, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+           
+            criteriaLabel = new JLabel("Criteria: ");
+            addComp(bookPanel, criteriaLabel, 0, 6, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+            criteriaField = new JTextField(15);
+            addComp(bookPanel, criteriaField, 1, 6, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+            
+            isbLabel = new JLabel("ISBN: ");
+            addComp(bookPanel, isbLabel, 0, 7, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+            isbField = new JTextField(15);
+            addComp(bookPanel, isbField, 1, 7, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+            
+
+            ListenForBooks lForBooks = new ListenForBooks();
+            addButton = new JButton("Add Book");
+            addButton.addActionListener(lForBooks);
+            addComp(bookPanel, addButton, 0, 8, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+            cancelButton = new JButton("Cancel");
+            addButton.addActionListener(lForBooks);
+            addComp(bookPanel, cancelButton, 1, 8, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+            
+            this.add(bookPanel);
+            this.pack();
+            this.setVisible(true);
+        }
+        
+        private class ListenForBooks implements ActionListener
+        {
+            public void actionPerformed(ActionEvent arg0)
+            {
+                
+            }
+        }
     }
 }
