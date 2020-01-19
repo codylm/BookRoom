@@ -149,6 +149,7 @@ public class Bookshelf
         if(!getShelfIsFull(shelf))
         {
             shelves.get(shelf).add(book);
+            numBooksOnShelves++;
         }
         else
         {
@@ -157,6 +158,7 @@ public class Bookshelf
                 if(!getShelfIsFull(i))
                 {
                     shelves.get(i).add(book);
+                    numBooksOnShelves++;
                     return;
                 }
             }

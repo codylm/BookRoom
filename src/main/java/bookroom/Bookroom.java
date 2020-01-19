@@ -1,6 +1,7 @@
 package bookroom;
 
 import java.util.*;
+import java.time.*;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -277,7 +278,10 @@ public class Bookroom extends JFrame
             }
             else if(e.getSource() == addBookButton)
             {
-                new BookFrame();
+                if(selectedShelf != null)
+                {
+                    new BookFrame();
+                }
             }
         }
         
@@ -289,7 +293,7 @@ public class Bookroom extends JFrame
                dateLabel, priceLabel, criteriaLabel, isbLabel;
         JTextField nameField, authorField, genreField, coverField,
                    dateField, priceField, criteriaField, isbField;
-        JButton addButton, cancelButton;
+        JButton addButton;
         
         private BookFrame()
         {
@@ -345,9 +349,6 @@ public class Bookroom extends JFrame
             addButton = new JButton("Add Book");
             addButton.addActionListener(lForBooks);
             addComp(bookPanel, addButton, 0, 8, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
-            cancelButton = new JButton("Cancel");
-            addButton.addActionListener(lForBooks);
-            addComp(bookPanel, cancelButton, 1, 8, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
             
             this.add(bookPanel);
             this.pack();
@@ -356,9 +357,30 @@ public class Bookroom extends JFrame
         
         private class ListenForBooks implements ActionListener
         {
-            public void actionPerformed(ActionEvent arg0)
+            public void actionPerformed(ActionEvent e)
             {
-                
+                if(e.getSource() == addButton)
+                {
+                    String name = nameField.getText();
+                    String author = authorField.getText();
+                    String genre = genreField.getText();
+                    String cover = coverField.getText();
+                    LocalDate date = LocalDate.parse(dateField.getText());
+                    double price = Double.parseDouble(priceField.getText());
+                    Criteria criteria = Criteria.valueOf(criteriaField.getText());
+                    long isb = Long.parseLong(isbField.getText());
+                    Book newBook = new Book(name, author, genre, cover, date, price, criteria, isb);
+                    try
+                    {
+                            selectedShelf.addBook(newBook, 0);
+                    } catch (InvalidNumberException e1)
+                    {
+                        e1.printStackTrace();
+                    } catch (AllShelvesAreFullException e1)
+                    {
+                        e1.printStackTrace();
+                    }
+                }
             }
         }
     }
