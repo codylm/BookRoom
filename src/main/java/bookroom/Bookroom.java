@@ -15,7 +15,7 @@ public class Bookroom extends JFrame
 {
     
     JComboBox bookroomBox, percentBox;
-    JTextField isbnField, shelvesField, shelvesField2, nameField, revenueField;
+    JTextField isbnField, shelvesField, shelvesField2, nameField, revenueField, empNameField;
     JButton addButton, selectButton, percentButton, infoButton, criteriaButton,
             findFirstShelfButton, findNumCopiesButton, checkRestockButton,
             signalRestockButton, removeBookButton, totalRestocksButton,
@@ -26,14 +26,14 @@ public class Bookroom extends JFrame
     JButton readFileButton, restockerButton, checkerButton, checkRestockerButton, checkCheckerButton,
             frequentRestockerButton, frequentCheckerButton, frequentRestockDayButton,
             frequentRestockMonthButton, frequentCheckDayButton, frequentCheckMonthButton,
-            averageRestockButton, averageCheckButton;
-    JLabel bookshelvesLabel, selectedLabel, percentLabel, isbnLabel,
-           restockLabel, shelvesLabel, shelvesLabel2, nameLabel, revenueLabel;
+            averageRestockButton, averageCheckButton, setRestockButton;
+    JLabel bookshelvesLabel, selectedLabel, percentLabel, isbnLabel, empNameLabel,
+           shelvesLabel, shelvesLabel2, nameLabel, revenueLabel;
     
     private BookshelfGroup bookroom = new BookshelfGroup(0.4);
     private Bookshelf selectedShelf;
     private Analytics analyzer = new Analytics();
-    private int bookshelfNum = 0;
+    private int bookshelfNum = 0, singleShelfIndex = 0;
     private String bookshelfInfo = "";
     
     public static void main(String[] args)
@@ -92,16 +92,25 @@ public class Bookroom extends JFrame
         removeBookButton = new JButton("Remove First Instance of Book");
         addComp(shelfPanel, removeBookButton, 0, 3, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
         findFirstShelfButton = new JButton("Find Shelf of First Book Instance");
+        findFirstShelfButton.addActionListener(lForButtons);
         addComp(shelfPanel, findFirstShelfButton, 1, 3, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
         findNumCopiesButton = new JButton("Find # of Copies of Book");
         addComp(shelfPanel, findNumCopiesButton, 2, 3, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
         
-        restockLabel = new JLabel("Bookshelves Needs Restock: NO");
-        addComp(shelfPanel, restockLabel, 0, 4, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+        empNameLabel = new JLabel("Employee Name: ");
+        addComp(shelfPanel, empNameLabel, 0, 4, 1, 1, GridBagConstraints.EAST, GridBagConstraints.NONE);
+        empNameField = new JTextField(15);
+        addComp(shelfPanel, empNameField, 1, 4, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+        
         checkRestockButton = new JButton("Check if Shelves Needs Restocking");
-        addComp(shelfPanel, checkRestockButton, 1, 4, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+        checkRestockButton.addActionListener(lForButtons);
+        addComp(shelfPanel, checkRestockButton, 2, 4, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+        
         signalRestockButton = new JButton("Signal that Shelves are Restocked");
-        addComp(shelfPanel, signalRestockButton, 2, 4, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+        signalRestockButton.addActionListener(lForButtons);
+        addComp(shelfPanel, signalRestockButton, 2, 5, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+        
+        
         
         addComp(thePanel, shelfPanel, 0, 0, 1, 1, GridBagConstraints.NORTH, GridBagConstraints.NONE);
 
@@ -139,6 +148,10 @@ public class Bookroom extends JFrame
         addComp(selectedPanel, copiesOfBookButton, 2, 2, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
         sortShelfButton = new JButton("Sort Shelf");
         addComp(selectedPanel, sortShelfButton, 3, 2, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+        
+        setRestockButton = new JButton("Mark Shelf for Restock");
+        setRestockButton.addActionListener(lForButtons);
+        addComp(selectedPanel, setRestockButton, 0, 3, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
         
         addComp(thePanel, selectedPanel, 0, 1, 1, 1, GridBagConstraints.NORTH, GridBagConstraints.NONE);
         
@@ -183,9 +196,9 @@ public class Bookroom extends JFrame
         frequentCheckMonthButton = new JButton("Most Frequent Check Month");
         addComp(analyticsPanel, frequentCheckMonthButton, 3, 3, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
         
-        totalRestocksButton = new JButton("Most Frequent Restock Day");
+        totalRestocksButton = new JButton("Get Total Restocks");
         addComp(analyticsPanel, totalRestocksButton, 0, 4, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
-        totalChecksButton = new JButton("Most Frequent Restock Month");
+        totalChecksButton = new JButton("Get Total Checks");
         addComp(analyticsPanel, totalChecksButton, 1, 4, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
         //not sure about these two things, but
         revenueLabel = new JLabel("Get Specific Restock:");
@@ -282,6 +295,45 @@ public class Bookroom extends JFrame
                 {
                     new BookFrame();
                 }
+            }
+            else if(e.getSource() == removeBookButton)
+            {
+                if(selectedShelf != null && isbnField.getText() != "")
+                {
+                    //selectedShelf.removeBook(book, singleShelfIndex);
+                }
+            }
+            else if(e.getSource() == findFirstShelfButton)
+            {
+                if(selectedShelf != null && isbnField.getText() != "")
+                {
+                    long isbn = Long.parseLong(isbnField.getText());
+                    bookshelfInfo += bookroom.findFirstShelfOfBook(isbn);
+                    JOptionPane.showMessageDialog(Bookroom.this, bookshelfInfo, "First Shelf", JOptionPane.INFORMATION_MESSAGE);
+                    bookshelfInfo = "";
+                } 
+            }
+            else if(e.getSource() == findNumCopiesButton)
+            {
+                if(selectedShelf != null && isbnField.getText() != "")
+                {
+                    //long isbn = Long.parseLong(isbnField.getText());
+                }
+            }
+            else if(e.getSource() == setRestockButton)
+            {
+                if(selectedShelf != null)
+                {
+                    selectedShelf.setRestock();
+                }
+            }
+            else if(e.getSource() == checkRestockButton)
+            {
+                bookroom.checkForRestock(empNameField.getText());
+            }
+            else if(e.getSource() == signalRestockButton)
+            {
+                bookroom.signalRestock(empNameField.getText());
             }
         }
         
