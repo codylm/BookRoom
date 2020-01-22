@@ -167,11 +167,29 @@ public class Bookshelf
     }
     
     //probably need to refactor this to be less crappy at some point,
-    //considering it's kinda circular...
-    public Book removeBook(Book book, int shelf)
+    //considering it's kinda circular..
+    //!!!!
+    public Book removeBook(long isb) throws BookDoesNotExistException
     {
-        int index = shelves.get(shelf).indexOf(book);
-        return shelves.get(shelf).get(index);
+        Book foundBook = null;
+        for(int i = 0; i < shelves.size(); i++)
+        {
+            for(int j = 0; j < shelves.get(i).size(); j++)
+            {
+                if(shelves.get(i).get(j).getIsb() == isb)
+                {
+                    foundBook = shelves.get(i).get(j);
+                    shelves.get(i).remove(foundBook);
+                    numBooksOnShelves--;
+                    break;
+                }
+            }
+        }
+        if(foundBook == null)
+        {
+            throw new BookDoesNotExistException("The desired book is not on this bookshelf.");
+        }
+        return foundBook;
     }
     
     //The reasoning being that the odds of two books with the same name and author are incredibly small;
@@ -309,14 +327,15 @@ public class Bookshelf
     //feel like I might need to put an isEqual function in book that checks all the
     //primitive/immutable stuff to fully check that they're the same, but this should
     //work for basic functionality
-    public int getNumCopiesOfBook(Book book)
+    //!!!!
+    public int getNumCopiesOfBook(long isb)
     {
         int copies = 0;
         for(int i = 0; i < shelves.size(); i++)
         {
             for(int j = 0; j < shelves.get(i).size(); j++)
             {
-                if(shelves.get(i).get(j).getIsb() == book.getIsb())
+                if(shelves.get(i).get(j).getIsb() == isb)
                 {
                     copies++;
                 }

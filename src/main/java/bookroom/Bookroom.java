@@ -91,10 +91,12 @@ public class Bookroom extends JFrame
         
         removeBookButton = new JButton("Remove First Instance of Book");
         addComp(shelfPanel, removeBookButton, 0, 3, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+        removeBookButton.addActionListener(lForButtons);
         findFirstShelfButton = new JButton("Find Shelf of First Book Instance");
         findFirstShelfButton.addActionListener(lForButtons);
         addComp(shelfPanel, findFirstShelfButton, 1, 3, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
         findNumCopiesButton = new JButton("Find # of Copies of Book");
+        findNumCopiesButton.addActionListener(lForButtons);
         addComp(shelfPanel, findNumCopiesButton, 2, 3, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
         
         empNameLabel = new JLabel("Employee Name: ");
@@ -120,8 +122,10 @@ public class Bookroom extends JFrame
         selectedPanel.setLayout(new GridBagLayout());
         
         changeCriteriaButton = new JButton("Change Main Classification");
+        changeCriteriaButton.addActionListener(lForButtons);
         addComp(selectedPanel, changeCriteriaButton, 0, 0, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
         changeCriteriaTypeButton = new JButton("Change Sub-Classification");
+        changeCriteriaTypeButton.addActionListener(lForButtons);
         addComp(selectedPanel, changeCriteriaTypeButton, 1, 0, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
         shelvesLabel = new JLabel("Shelf #: ");
         addComp(selectedPanel, shelvesLabel, 2, 0, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
@@ -130,11 +134,14 @@ public class Bookroom extends JFrame
         contentsOfShelfButton = new JButton("Get Books on Given Shelf");
         addComp(selectedPanel, contentsOfShelfButton, 3, 0, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
         
-        booksOnShelfButton = new JButton("# of Books on Shelf");
+        booksOnShelfButton = new JButton("# of Books on Single Shelf");
+        booksOnShelfButton.addActionListener(lForButtons);
         addComp(selectedPanel, booksOnShelfButton, 0, 1, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
-        getShelfIsFullButton = new JButton("Check if Shelf is Full");
+        getShelfIsFullButton = new JButton("Check if Single Shelf is Full");
+        getShelfIsFullButton.addActionListener(lForButtons);
         addComp(selectedPanel, getShelfIsFullButton, 1, 1, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
         toggleShelfFullButton = new JButton("Mark Shelf as Full/Not Full");
+        toggleShelfFullButton.addActionListener(lForButtons);
         addComp(selectedPanel, toggleShelfFullButton, 2, 1, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
         addBookButton = new JButton("Add Book to Shelf");
         addBookButton.addActionListener(lForButtons);
@@ -300,7 +307,15 @@ public class Bookroom extends JFrame
             {
                 if(selectedShelf != null && isbnField.getText() != "")
                 {
-                    //selectedShelf.removeBook(book, singleShelfIndex);
+                    long isbn = Long.parseLong(isbnField.getText());
+                    try
+                    {
+                        selectedShelf.removeBook(isbn);
+                    } catch (BookDoesNotExistException e1)
+                    {
+                        // TODO Auto-generated catch block
+                        e1.printStackTrace();
+                    }
                 }
             }
             else if(e.getSource() == findFirstShelfButton)
@@ -317,7 +332,11 @@ public class Bookroom extends JFrame
             {
                 if(selectedShelf != null && isbnField.getText() != "")
                 {
-                    //long isbn = Long.parseLong(isbnField.getText());
+                    long isbn = Long.parseLong(isbnField.getText());
+                    int copies = selectedShelf.getNumCopiesOfBook(isbn);
+                    bookshelfInfo += "Number of Copies: " + String.valueOf(copies);
+                    JOptionPane.showMessageDialog(Bookroom.this, bookshelfInfo, "Number of Copies", JOptionPane.INFORMATION_MESSAGE);
+                    bookshelfInfo = "";
                 }
             }
             else if(e.getSource() == setRestockButton)
@@ -334,6 +353,68 @@ public class Bookroom extends JFrame
             else if(e.getSource() == signalRestockButton)
             {
                 bookroom.signalRestock(empNameField.getText());
+            }
+            else if(e.getSource() == changeCriteriaButton)
+            {
+                if(selectedShelf != null)
+                {
+                    new CriteriaFrame();
+                }
+            }
+            else if(e.getSource() == changeCriteriaTypeButton)
+            {
+                if(selectedShelf != null)
+                {
+                    new CriteriaTypeFrame();
+                }
+            }
+            else if(e.getSource() == booksOnShelfButton)
+            {
+                if(selectedShelf != null)
+                {
+                    try
+                    {
+                        bookshelfInfo += "Number of Books: " + selectedShelf.getNumBooksOnShelf(Integer.parseInt(shelvesField.getText()));
+                    } catch (NumberFormatException e1)
+                    {
+                        // TODO Auto-generated catch block
+                        e1.printStackTrace();
+                    } catch (InvalidNumberException e1)
+                    {
+                        // TODO Auto-generated catch block
+                        e1.printStackTrace();
+                    }
+                    JOptionPane.showMessageDialog(Bookroom.this, bookshelfInfo, "Number of Books", JOptionPane.INFORMATION_MESSAGE);
+                    bookshelfInfo = "";
+                }
+            }
+            else if(e.getSource() == getShelfIsFullButton)
+            {
+                try
+                {
+                    bookshelfInfo += "Shelf is Full: " + selectedShelf.getShelfIsFull(Integer.parseInt(shelvesField.getText()));
+                } catch (InvalidNumberException e1)
+                {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
+                JOptionPane.showMessageDialog(Bookroom.this, bookshelfInfo, "Is Shelf Full", JOptionPane.INFORMATION_MESSAGE);
+                bookshelfInfo = "";
+            }
+            else if(e.getSource() == toggleShelfFullButton)
+            {
+                try
+                {
+                    selectedShelf.toggleShelfFull(Integer.parseInt(shelvesField.getText()));
+                } catch (NumberFormatException e1)
+                {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                } catch (InvalidNumberException e1)
+                {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
             }
         }
         
@@ -434,6 +515,98 @@ public class Bookroom extends JFrame
                     }
                 }
             }
+        }
+    }
+    
+    private class CriteriaFrame extends JFrame
+    {
+        JTextField criteriaField;
+        JButton changeButton;
+        JLabel newLabel;
+        
+        private CriteriaFrame()
+        {
+            this.setSize(400, 400);
+            this.setLocationRelativeTo(null);
+            this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            this.setTitle("Change Classification");
+            JPanel criteriaPanel = new JPanel();
+            criteriaPanel.setLayout(new GridBagLayout());
+            
+            newLabel = new JLabel("Set New Main Classification: ");
+            addComp(criteriaPanel, newLabel, 0, 0, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+            
+            criteriaField = new JTextField(10);
+            addComp(criteriaPanel, criteriaField, 0, 1, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+            
+            ListenForCriteria l = new ListenForCriteria();
+            changeButton = new JButton("Confirm");
+            changeButton.addActionListener(l);
+            addComp(criteriaPanel, changeButton, 0, 2, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+            
+            
+            this.add(criteriaPanel);
+            this.pack();
+            this.setVisible(true);
+        }
+        
+        private class ListenForCriteria implements ActionListener
+        {
+
+            public void actionPerformed(ActionEvent e)
+            {
+                if(e.getSource() == changeButton)
+                {
+                    selectedShelf.setCriteria(Criteria.valueOf(criteriaField.getText()));
+                }
+            }
+            
+        }
+    }
+    
+    private class CriteriaTypeFrame extends JFrame
+    {
+        JTextField criteriaField;
+        JButton changeButton;
+        JLabel newLabel;
+        
+        private CriteriaTypeFrame()
+        {
+            this.setSize(400, 400);
+            this.setLocationRelativeTo(null);
+            this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            this.setTitle("Change Classification");
+            JPanel criteriaPanel = new JPanel();
+            criteriaPanel.setLayout(new GridBagLayout());
+            
+            newLabel = new JLabel("Set New Sub-Classification: ");
+            addComp(criteriaPanel, newLabel, 0, 0, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+            
+            criteriaField = new JTextField(10);
+            addComp(criteriaPanel, criteriaField, 0, 1, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+            
+            ListenForCriteria l = new ListenForCriteria();
+            changeButton = new JButton("Confirm");
+            changeButton.addActionListener(l);
+            addComp(criteriaPanel, changeButton, 0, 2, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+            
+            
+            this.add(criteriaPanel);
+            this.pack();
+            this.setVisible(true);
+        }
+        
+        private class ListenForCriteria implements ActionListener
+        {
+
+            public void actionPerformed(ActionEvent e)
+            {
+                if(e.getSource() == changeButton)
+                {
+                    selectedShelf.setCriteriaType(criteriaField.getText());
+                }
+            }
+            
         }
     }
 }
