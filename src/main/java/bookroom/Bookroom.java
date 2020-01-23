@@ -131,8 +131,9 @@ public class Bookroom extends JFrame
         addComp(selectedPanel, shelvesLabel, 2, 0, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
         shelvesField = new JTextField(2);
         addComp(selectedPanel, shelvesField, 2, 0, 1, 1, GridBagConstraints.EAST, GridBagConstraints.NONE);
-        contentsOfShelfButton = new JButton("Get Books on Given Shelf");
-        addComp(selectedPanel, contentsOfShelfButton, 3, 0, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+        getSpecificShelfButton = new JButton("Get Contents of Single Shelf");
+        getSpecificShelfButton.addActionListener(lForButtons);
+        addComp(selectedPanel, getSpecificShelfButton, 3, 0, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
         
         booksOnShelfButton = new JButton("# of Books on Single Shelf");
         booksOnShelfButton.addActionListener(lForButtons);
@@ -146,19 +147,20 @@ public class Bookroom extends JFrame
         addBookButton = new JButton("Add Book to Shelf");
         addBookButton.addActionListener(lForButtons);
         addComp(selectedPanel, addBookButton, 3, 1, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
-
-        getSpecificShelfButton = new JButton("Get Contents of Single Shelf");
-        addComp(selectedPanel, getSpecificShelfButton, 0, 2, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+        
         allWrongBooksButton = new JButton("Find Incorrect Books");
+        allWrongBooksButton.addActionListener(lForButtons);
         addComp(selectedPanel, allWrongBooksButton, 1, 2, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
-        copiesOfBookButton = new JButton("Find All Copies of Book");
+        copiesOfBookButton = new JButton("Find # Copies of Book on Shelf");
+        copiesOfBookButton.addActionListener(lForButtons);
         addComp(selectedPanel, copiesOfBookButton, 2, 2, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
         sortShelfButton = new JButton("Sort Shelf");
+        sortShelfButton.addActionListener(lForButtons);
         addComp(selectedPanel, sortShelfButton, 3, 2, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
         
         setRestockButton = new JButton("Mark Shelf for Restock");
         setRestockButton.addActionListener(lForButtons);
-        addComp(selectedPanel, setRestockButton, 0, 3, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+        addComp(selectedPanel, setRestockButton, 0, 2, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
         
         addComp(thePanel, selectedPanel, 0, 1, 1, 1, GridBagConstraints.NORTH, GridBagConstraints.NONE);
         
@@ -305,7 +307,7 @@ public class Bookroom extends JFrame
             }
             else if(e.getSource() == removeBookButton)
             {
-                if(selectedShelf != null && isbnField.getText() != "")
+                if(selectedShelf != null && !isbnField.getText().equals(""))
                 {
                     long isbn = Long.parseLong(isbnField.getText());
                     try
@@ -320,7 +322,7 @@ public class Bookroom extends JFrame
             }
             else if(e.getSource() == findFirstShelfButton)
             {
-                if(selectedShelf != null && isbnField.getText() != "")
+                if(selectedShelf != null && !isbnField.getText().equals(""))
                 {
                     long isbn = Long.parseLong(isbnField.getText());
                     bookshelfInfo += bookroom.findFirstShelfOfBook(isbn);
@@ -330,7 +332,7 @@ public class Bookroom extends JFrame
             }
             else if(e.getSource() == findNumCopiesButton)
             {
-                if(selectedShelf != null && isbnField.getText() != "")
+                if(selectedShelf != null && !isbnField.getText().equals(""))
                 {
                     long isbn = Long.parseLong(isbnField.getText());
                     int copies = selectedShelf.getNumCopiesOfBook(isbn);
@@ -348,11 +350,17 @@ public class Bookroom extends JFrame
             }
             else if(e.getSource() == checkRestockButton)
             {
-                bookroom.checkForRestock(empNameField.getText());
+                if(!empNameField.getText().equals(""))
+                {
+                    bookroom.checkForRestock(empNameField.getText());
+                }
             }
             else if(e.getSource() == signalRestockButton)
             {
-                bookroom.signalRestock(empNameField.getText());
+                if(!empNameField.getText().equals(""))
+                {
+                    bookroom.signalRestock(empNameField.getText());
+                }
             }
             else if(e.getSource() == changeCriteriaButton)
             {
@@ -370,7 +378,7 @@ public class Bookroom extends JFrame
             }
             else if(e.getSource() == booksOnShelfButton)
             {
-                if(selectedShelf != null)
+                if(selectedShelf != null && !shelvesField.getText().equals(""))
                 {
                     try
                     {
@@ -390,30 +398,88 @@ public class Bookroom extends JFrame
             }
             else if(e.getSource() == getShelfIsFullButton)
             {
-                try
+                if(!shelvesField.getText().equals(""))
                 {
-                    bookshelfInfo += "Shelf is Full: " + selectedShelf.getShelfIsFull(Integer.parseInt(shelvesField.getText()));
-                } catch (InvalidNumberException e1)
-                {
-                    // TODO Auto-generated catch block
-                    e1.printStackTrace();
+                    try
+                    {
+                        bookshelfInfo += "Shelf is Full: " + selectedShelf.getShelfIsFull(Integer.parseInt(shelvesField.getText()));
+                    } catch (InvalidNumberException e1)
+                    {
+                        // TODO Auto-generated catch block
+                        e1.printStackTrace();
+                    }
+                    JOptionPane.showMessageDialog(Bookroom.this, bookshelfInfo, "Is Shelf Full", JOptionPane.INFORMATION_MESSAGE);
+                    bookshelfInfo = "";
                 }
-                JOptionPane.showMessageDialog(Bookroom.this, bookshelfInfo, "Is Shelf Full", JOptionPane.INFORMATION_MESSAGE);
-                bookshelfInfo = "";
             }
             else if(e.getSource() == toggleShelfFullButton)
             {
-                try
+                if(!shelvesField.getText().equals(""))
                 {
-                    selectedShelf.toggleShelfFull(Integer.parseInt(shelvesField.getText()));
-                } catch (NumberFormatException e1)
+                    try
+                    {
+                        selectedShelf.toggleShelfFull(Integer.parseInt(shelvesField.getText()));
+                    } catch (NumberFormatException e1)
+                    {
+                        // TODO Auto-generated catch block
+                        e1.printStackTrace();
+                    } catch (InvalidNumberException e1)
+                    {
+                        // TODO Auto-generated catch block
+                        e1.printStackTrace();
+                    }
+                }
+            }
+            else if(e.getSource() == getSpecificShelfButton)
+            {
+                if(!shelvesField.getText().equals(""))
                 {
-                    // TODO Auto-generated catch block
-                    e1.printStackTrace();
-                } catch (InvalidNumberException e1)
+                    List<Book> shelf = selectedShelf.getSingularShelf(Integer.parseInt(shelvesField.getText()));
+                    for(Book book : shelf)
+                    {
+                        bookshelfInfo += book.getName() + ", " + book.getAuthor() + "; Price: " + book.getPrice() + "\n";
+                    }
+                    
+                    JOptionPane.showMessageDialog(Bookroom.this, bookshelfInfo, "Bookshelf Contents", JOptionPane.INFORMATION_MESSAGE);
+                    bookshelfInfo = "";
+                }
+            }
+            else if(e.getSource() == allWrongBooksButton)
+            {
+                if(!shelvesField.getText().equals(""))
                 {
-                    // TODO Auto-generated catch block
-                    e1.printStackTrace();
+                    List<Book> shelf = selectedShelf.findAllWrongBooks();
+                    for(Book book : shelf)
+                    {
+                        bookshelfInfo += book.getName() + ", " + book.getAuthor() + "\n";
+                    }
+                    
+                    JOptionPane.showMessageDialog(Bookroom.this, bookshelfInfo, "Wrongly Classified Books", JOptionPane.INFORMATION_MESSAGE);
+                    bookshelfInfo = "";
+                }
+            }
+            else if(e.getSource() == copiesOfBookButton)
+            {
+                if(!isbnField.getText().equals(""))
+                {
+                    bookshelfInfo += selectedShelf.getNumCopiesOfBook(Long.parseLong(isbnField.getText()));
+                    
+                    JOptionPane.showMessageDialog(Bookroom.this, bookshelfInfo, "Bookshelf Contents", JOptionPane.INFORMATION_MESSAGE);
+                    bookshelfInfo = "";
+                }
+            }
+            else if(e.getSource() == sortShelfButton)
+            {
+                if(selectedShelf != null && !shelvesField.getText().equals(""))
+                {
+                    try
+                    {
+                        selectedShelf.sortAllShelves();
+                    } catch (InvalidNumberException e1)
+                    {
+                        // TODO Auto-generated catch block
+                        e1.printStackTrace();
+                    }
                 }
             }
         }
@@ -505,7 +571,7 @@ public class Bookroom extends JFrame
                     Book newBook = new Book(name, author, genre, cover, date, price, criteria, isb);
                     try
                     {
-                            selectedShelf.addBook(newBook, 0);
+                            selectedShelf.addBook(newBook, Integer.parseInt(shelvesField.getText()));
                     } catch (InvalidNumberException e1)
                     {
                         e1.printStackTrace();

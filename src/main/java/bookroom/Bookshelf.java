@@ -250,7 +250,7 @@ public class Bookshelf
             {
                 for(int j = 0; j < shelves.get(i).size(); j++)
                 {
-                    if(shelves.get(i).get(j).getAuthor() != getCriteriaType())
+                    if(!shelves.get(i).get(j).getAuthor().contentEquals(getCriteriaType()))
                     {
                         wrongBooks.add(shelves.get(i).get(j));
                     }
@@ -262,7 +262,7 @@ public class Bookshelf
             {
                 for(int j = 0; j < shelves.get(i).size(); j++)
                 {
-                    if(shelves.get(i).get(j).getCover() != getCriteriaType())
+                    if(!shelves.get(i).get(j).getCover().contentEquals(getCriteriaType()))
                     {
                         wrongBooks.add(shelves.get(i).get(j));
                     }
@@ -274,7 +274,7 @@ public class Bookshelf
             {
                 for(int j = 0; j < shelves.get(i).size(); j++)
                 {
-                    if(shelves.get(i).get(j).getGenre() != getCriteriaType())
+                    if(!shelves.get(i).get(j).getGenre().contentEquals(getCriteriaType()))
                     {
                         wrongBooks.add(shelves.get(i).get(j));
                     }
@@ -286,7 +286,7 @@ public class Bookshelf
             {
                 for(int j = 0; j < shelves.get(i).size(); j++)
                 {
-                    if(shelves.get(i).get(j).getName() != getCriteriaType())
+                    if(!shelves.get(i).get(j).getName().contentEquals(getCriteriaType()))
                     {
                         wrongBooks.add(shelves.get(i).get(j));
                     }
@@ -355,6 +355,7 @@ public class Bookshelf
         for(int i = 0; i < shelves.size(); i++)
         {
             sortSingularShelf(i);
+            System.out.println("hi");
         }
     }
     
