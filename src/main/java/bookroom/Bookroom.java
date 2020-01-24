@@ -170,6 +170,7 @@ public class Bookroom extends JFrame
         analyticsPanel.setLayout(new GridBagLayout());
         
         readFileButton = new JButton("Read Restock File");
+        readFileButton.addActionListener(lForButtons);
         addComp(analyticsPanel, readFileButton, 0, 0, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
         nameLabel = new JLabel("Name: ");
         addComp(analyticsPanel, nameLabel, 1, 0, 1, 1, GridBagConstraints.EAST, GridBagConstraints.NONE);
@@ -178,12 +179,16 @@ public class Bookroom extends JFrame
         
 
         restockerButton = new JButton("Restocker Numbers");
+        restockerButton.addActionListener(lForButtons);
         addComp(analyticsPanel, restockerButton, 0, 1, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
         checkerButton = new JButton("Checker Numbers");
+        checkerButton.addActionListener(lForButtons);
         addComp(analyticsPanel, checkerButton, 1, 1, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
         checkRestockerButton = new JButton("Check For Restocker");
+        checkRestockerButton.addActionListener(lForButtons);
         addComp(analyticsPanel, checkRestockerButton, 2, 1, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
         checkCheckerButton = new JButton("Check for Checker");
+        checkCheckerButton.addActionListener(lForButtons);
         addComp(analyticsPanel, checkCheckerButton, 3, 1, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
         
         frequentRestockerButton = new JButton("Most Frequent Restocker");
@@ -481,6 +486,38 @@ public class Bookroom extends JFrame
                         e1.printStackTrace();
                     }
                 }
+            }
+            else if(e.getSource() == readFileButton)
+            {
+                analyzer.readRestockFile();
+            }
+            else if(e.getSource() == restockerButton)
+            {
+                int numbers = analyzer.getRestockNumbers(nameField.getText());
+                bookshelfInfo += "Number of Restocks by this Employee: " + String.valueOf(numbers);
+                JOptionPane.showMessageDialog(Bookroom.this, bookshelfInfo, "Restocker Numbers", JOptionPane.INFORMATION_MESSAGE);
+                bookshelfInfo = "";
+            }
+            else if(e.getSource() == checkerButton)
+            {
+                int numbers = analyzer.getCheckerNumbers(nameField.getText());
+                bookshelfInfo += "Number of Checks by this Employee: " + String.valueOf(numbers);
+                JOptionPane.showMessageDialog(Bookroom.this, bookshelfInfo, "Checker Numbers", JOptionPane.INFORMATION_MESSAGE);
+                bookshelfInfo = "";
+            }
+            else if(e.getSource() == checkRestockerButton)
+            {
+                boolean hasRestocked = analyzer.checkForRestocker(nameField.getText());
+                bookshelfInfo += "Has Employee Restocked Since File Clear: " + String.valueOf(hasRestocked);
+                JOptionPane.showMessageDialog(Bookroom.this, bookshelfInfo, "Has Restocked", JOptionPane.INFORMATION_MESSAGE);
+                bookshelfInfo = "";
+            }
+            else if(e.getSource() == checkCheckerButton)
+            {
+                boolean hasChecked = analyzer.checkForChecker(nameField.getText());
+                bookshelfInfo += "Has Employee Checked Since File Clear: " + String.valueOf(hasChecked);
+                JOptionPane.showMessageDialog(Bookroom.this, bookshelfInfo, "Has Checked", JOptionPane.INFORMATION_MESSAGE);
+                bookshelfInfo = "";
             }
         }
         

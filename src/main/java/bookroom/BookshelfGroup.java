@@ -99,12 +99,12 @@ public class BookshelfGroup
     
     //not sure if this should take a book or an isbn
     //probably need to rework this to an isbn
-    public int getNumCopiesOfBook(Book book)
+    public int getNumCopiesOfBook(long isbn)
     {
         int copies = 0;
         for(Bookshelf value : shelves.values())
         {
-            copies += value.getNumCopiesOfBook(book);
+            copies += value.getNumCopiesOfBook(isbn);
         }
         return copies;
     }
@@ -188,18 +188,23 @@ public class BookshelfGroup
         }
     }
     
-    public void removeFirstInstanceOfBook(Book book)
+    //this needed a fair bit of reworking to get rid of some errors introduced when some functions in bookshelf
+    //changed, need to double check and make sure everything works here
+    public void removeFirstInstanceOfBook(long isbn) throws BookDoesNotExistException
     {
         outerloop:
         for(Bookshelf value : shelves.values())
         {
             for(int i = 0; i < value.getNumOfShelves(); i++)
             {
-                if(value.getSingularShelf(i).contains(book))
+                for(int j = 0; j < value.getSingularShelf(i).size(); j++)
                 {
-                    Book removedBook = value.removeBook(book, i);
-                    cycleRevenue += removedBook.getPrice();
-                    break outerloop;
+                    if(value.getSingularShelf(i).get(j).getIsb() != isbn)
+                    {
+                        Book removedBook = value.removeBook(isbn);
+                        cycleRevenue += removedBook.getPrice();
+                        break outerloop;
+                    }
                 }
             }
         }

@@ -133,12 +133,26 @@ public class Analytics
     
     public int getRestockNumbers(String name)
     {
-        return restockers.get(name);
+        try
+        {
+            return restockers.get(name);
+        }
+        catch(NullPointerException e)
+        {
+            return 0;
+        }
     }
     
     public int getCheckerNumbers(String name)
     {
-        return checkers.get(name);
+        try
+        {
+            return checkers.get(name);
+        }
+        catch(NullPointerException e)
+        {
+            return 0;
+        }
     }
     
     public String getRestockData(int index)

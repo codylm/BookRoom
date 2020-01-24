@@ -282,7 +282,7 @@ public class BookroomTest
     public void testGetCopiesOfBookOnShelf()
     {
         Book book = new Book("Blah", "Blah", "Fiction", "Paperback", LocalDate.of(1111, 1, 1), 1.99, Criteria.NAME, 1234567890);
-        assertEquals(5, bookshelf.getNumCopiesOfBook(book));
+        assertEquals(5, bookshelf.getNumCopiesOfBook(book.getIsb()));
     }
     
     @Test
@@ -464,7 +464,7 @@ public class BookroomTest
         bookshelf2.addBook(testBook, 2);
         bookshelf2.addBook(testBook, 3);
         bookshelf2.addBook(testBook, 1);
-        int copies = bookroom.getNumCopiesOfBook(testBook);
+        int copies = bookroom.getNumCopiesOfBook(testBook.getIsb());
         assertEquals(8, copies);
     }
     
@@ -626,7 +626,7 @@ public class BookroomTest
     }
     
     @Test
-    public void testzGetGrossRevenueFromRestockSignal()
+    public void testzGetGrossRevenueFromRestockSignal() throws BookDoesNotExistException
     {
         Bookshelf bookshelf2 = new Bookshelf(4, "Fiction", Criteria.GENRE);
         Bookshelf bookshelf3 = new Bookshelf(4, "Fiction", Criteria.GENRE);
@@ -639,9 +639,9 @@ public class BookroomTest
         bookroom.getShelf(0).setRestock();
         bookroom.getShelf(1).setRestock();
         
-        bookroom.removeFirstInstanceOfBook(testBook);
-        bookroom.removeFirstInstanceOfBook(testBook);
-        bookroom.removeFirstInstanceOfBook(testBook);
+        bookroom.removeFirstInstanceOfBook(testBook.getIsb());
+        bookroom.removeFirstInstanceOfBook(testBook.getIsb());
+        bookroom.removeFirstInstanceOfBook(testBook.getIsb());
         
         boolean dummy = bookroom.checkForRestock("Carlos");
         Analytics dummyAnalyzer = new Analytics();
