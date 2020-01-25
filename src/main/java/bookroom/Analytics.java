@@ -322,12 +322,13 @@ public class Analytics
         return month;
     }
     
-    //!
     //not sure about the return type here either yet, need to look into how this
     //kinda thing is done
+
+    //both this and the other have issues with single times that are thirds
+    //of 60, probably because it's an repeating decimal and rounding weirdness?
     public String findAverageRestockSignalTime()
     {
-        DecimalFormat f = new DecimalFormat("##.##");
         int index = 0;
         double average = 0;
         double count = 0;
@@ -355,10 +356,10 @@ public class Analytics
         return averageTime;
     }
     
-    //!
+    //both this and the other have issues with single times that are thirds
+    //of 60, probably because it's an repeating decimal and rounding weirdness?
     public String findAverageRoomRestockedTime()
     {
-        DecimalFormat f = new DecimalFormat("##.##");
         int index = 1;
         double average = 0;
         double count = 0;

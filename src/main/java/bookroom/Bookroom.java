@@ -192,12 +192,16 @@ public class Bookroom extends JFrame
         addComp(analyticsPanel, checkCheckerButton, 3, 1, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
         
         frequentRestockerButton = new JButton("Most Frequent Restocker");
+        frequentRestockerButton.addActionListener(lForButtons);
         addComp(analyticsPanel, frequentRestockerButton, 0, 2, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
         frequentCheckerButton = new JButton("Most Frequent Checker");
+        frequentCheckerButton.addActionListener(lForButtons);
         addComp(analyticsPanel, frequentCheckerButton, 1, 2, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
         averageRestockButton = new JButton("Get Average Restock Time");
+        averageRestockButton.addActionListener(lForButtons);
         addComp(analyticsPanel, averageRestockButton, 2, 2, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
         averageCheckButton = new JButton("Get Average Check Time");
+        averageCheckButton.addActionListener(lForButtons);
         addComp(analyticsPanel, averageCheckButton, 3, 2, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
         
         
@@ -517,6 +521,30 @@ public class Bookroom extends JFrame
                 boolean hasChecked = analyzer.checkForChecker(nameField.getText());
                 bookshelfInfo += "Has Employee Checked Since File Clear: " + String.valueOf(hasChecked);
                 JOptionPane.showMessageDialog(Bookroom.this, bookshelfInfo, "Has Checked", JOptionPane.INFORMATION_MESSAGE);
+                bookshelfInfo = "";
+            }
+            else if(e.getSource() == frequentRestockerButton)
+            {
+                bookshelfInfo += "Most Frequent Restocker: " + analyzer.findMostFrequentRestocker();
+                JOptionPane.showMessageDialog(Bookroom.this, bookshelfInfo, "Most FrequentRestocker", JOptionPane.INFORMATION_MESSAGE);
+                bookshelfInfo = "";
+            }
+            else if(e.getSource() == frequentCheckerButton)
+            {
+                bookshelfInfo += "Most Frequent Checker: " + analyzer.findMostFrequentChecker();
+                JOptionPane.showMessageDialog(Bookroom.this, bookshelfInfo, "Most Frequent Checker", JOptionPane.INFORMATION_MESSAGE);
+                bookshelfInfo = "";
+            }
+            else if(e.getSource() == averageRestockButton)
+            {
+                bookshelfInfo += "Average Restock Time: " + analyzer.findAverageRoomRestockedTime();
+                JOptionPane.showMessageDialog(Bookroom.this, bookshelfInfo, "Average Restock Time", JOptionPane.INFORMATION_MESSAGE);
+                bookshelfInfo = "";
+            }
+            else if(e.getSource() == averageCheckButton)
+            {
+                bookshelfInfo += "Average Check Time: " + analyzer.findAverageRestockSignalTime();
+                JOptionPane.showMessageDialog(Bookroom.this, bookshelfInfo, "Average Check Time", JOptionPane.INFORMATION_MESSAGE);
                 bookshelfInfo = "";
             }
         }

@@ -612,7 +612,7 @@ public class BookroomTest
     public void testzFindAverageRestockSignalTime()
     {
         String time = analyzer.findAverageRestockSignalTime();
-        assertEquals("2:45", time);
+        assertEquals("1:39", time);
     }
     
     //Yeah ima be honest, because my room gets signalled and restocked
@@ -622,7 +622,7 @@ public class BookroomTest
     public void testzFindAverageRestockTime()
     {
         String time = analyzer.findAverageRoomRestockedTime();
-        assertEquals("2:45", time);
+        assertEquals("1:30", time);
     }
     
     @Test
