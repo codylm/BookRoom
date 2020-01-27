@@ -20,6 +20,9 @@ public class Analytics
     //file to their own file(s) and using those files to set up the analysis,
     //so maybe something to shoot for down the line
     
+
+    private boolean hasReadFile = false;
+    
     private Map<String, Integer> restockers;
     private Map<String, Integer> checkers;
     private Map<String, Integer> restockDays;
@@ -126,6 +129,7 @@ public class Analytics
             {
                 // Close the writer regardless of what happens...
                 reader.close();
+                hasReadFile = true;
             }
             catch (Exception e){}
         }
@@ -412,5 +416,10 @@ public class Analytics
         String[] data = restockData.get(restockNum).split(" ");
         double revenue = Double.valueOf(data[9]);
         return revenue;
+    }
+    
+    public boolean checkIfFileIsRead()
+    {
+        return hasReadFile;
     }
 }

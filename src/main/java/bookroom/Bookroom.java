@@ -206,12 +206,16 @@ public class Bookroom extends JFrame
         
         
         frequentRestockDayButton = new JButton("Most Frequent Restock Day");
+        frequentRestockDayButton.addActionListener(lForButtons);
         addComp(analyticsPanel, frequentRestockDayButton, 0, 3, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
         frequentRestockMonthButton = new JButton("Most Frequent Restock Month");
+        frequentRestockMonthButton.addActionListener(lForButtons);
         addComp(analyticsPanel, frequentRestockMonthButton, 1, 3, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
         frequentCheckDayButton = new JButton("Most Frequent Check Day");
+        frequentCheckDayButton.addActionListener(lForButtons);
         addComp(analyticsPanel, frequentCheckDayButton, 2, 3, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
         frequentCheckMonthButton = new JButton("Most Frequent Check Month");
+        frequentCheckMonthButton.addActionListener(lForButtons);
         addComp(analyticsPanel, frequentCheckMonthButton, 3, 3, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
         
         totalRestocksButton = new JButton("Get Total Restocks");
@@ -497,55 +501,115 @@ public class Bookroom extends JFrame
             }
             else if(e.getSource() == restockerButton)
             {
-                int numbers = analyzer.getRestockNumbers(nameField.getText());
-                bookshelfInfo += "Number of Restocks by this Employee: " + String.valueOf(numbers);
-                JOptionPane.showMessageDialog(Bookroom.this, bookshelfInfo, "Restocker Numbers", JOptionPane.INFORMATION_MESSAGE);
-                bookshelfInfo = "";
+                if(analyzer.checkIfFileIsRead())
+                {
+                    int numbers = analyzer.getRestockNumbers(nameField.getText());
+                    bookshelfInfo += "Number of Restocks by this Employee: " + String.valueOf(numbers);
+                    JOptionPane.showMessageDialog(Bookroom.this, bookshelfInfo, "Restocker Numbers", JOptionPane.INFORMATION_MESSAGE);
+                    bookshelfInfo = "";
+                }
             }
             else if(e.getSource() == checkerButton)
             {
-                int numbers = analyzer.getCheckerNumbers(nameField.getText());
-                bookshelfInfo += "Number of Checks by this Employee: " + String.valueOf(numbers);
-                JOptionPane.showMessageDialog(Bookroom.this, bookshelfInfo, "Checker Numbers", JOptionPane.INFORMATION_MESSAGE);
-                bookshelfInfo = "";
+                if(analyzer.checkIfFileIsRead())
+                {
+                    int numbers = analyzer.getCheckerNumbers(nameField.getText());
+                    bookshelfInfo += "Number of Checks by this Employee: " + String.valueOf(numbers);
+                    JOptionPane.showMessageDialog(Bookroom.this, bookshelfInfo, "Checker Numbers", JOptionPane.INFORMATION_MESSAGE);
+                    bookshelfInfo = "";
+                }
             }
             else if(e.getSource() == checkRestockerButton)
             {
-                boolean hasRestocked = analyzer.checkForRestocker(nameField.getText());
-                bookshelfInfo += "Has Employee Restocked Since File Clear: " + String.valueOf(hasRestocked);
-                JOptionPane.showMessageDialog(Bookroom.this, bookshelfInfo, "Has Restocked", JOptionPane.INFORMATION_MESSAGE);
-                bookshelfInfo = "";
+                if(analyzer.checkIfFileIsRead())
+                {
+                    boolean hasRestocked = analyzer.checkForRestocker(nameField.getText());
+                    bookshelfInfo += "Has Employee Restocked Since File Clear: " + String.valueOf(hasRestocked);
+                    JOptionPane.showMessageDialog(Bookroom.this, bookshelfInfo, "Has Restocked", JOptionPane.INFORMATION_MESSAGE);
+                    bookshelfInfo = "";
+                }
             }
             else if(e.getSource() == checkCheckerButton)
             {
-                boolean hasChecked = analyzer.checkForChecker(nameField.getText());
-                bookshelfInfo += "Has Employee Checked Since File Clear: " + String.valueOf(hasChecked);
-                JOptionPane.showMessageDialog(Bookroom.this, bookshelfInfo, "Has Checked", JOptionPane.INFORMATION_MESSAGE);
-                bookshelfInfo = "";
+                if(analyzer.checkIfFileIsRead())
+                {
+                    boolean hasChecked = analyzer.checkForChecker(nameField.getText());
+                    bookshelfInfo += "Has Employee Checked Since File Clear: " + String.valueOf(hasChecked);
+                    JOptionPane.showMessageDialog(Bookroom.this, bookshelfInfo, "Has Checked", JOptionPane.INFORMATION_MESSAGE);
+                    bookshelfInfo = "";
+                }
             }
             else if(e.getSource() == frequentRestockerButton)
             {
-                bookshelfInfo += "Most Frequent Restocker: " + analyzer.findMostFrequentRestocker();
-                JOptionPane.showMessageDialog(Bookroom.this, bookshelfInfo, "Most FrequentRestocker", JOptionPane.INFORMATION_MESSAGE);
-                bookshelfInfo = "";
+                if(analyzer.checkIfFileIsRead())
+                {
+                    bookshelfInfo += "Most Frequent Restocker: " + analyzer.findMostFrequentRestocker();
+                    JOptionPane.showMessageDialog(Bookroom.this, bookshelfInfo, "Most FrequentRestocker", JOptionPane.INFORMATION_MESSAGE);
+                    bookshelfInfo = "";
+                }
             }
             else if(e.getSource() == frequentCheckerButton)
             {
-                bookshelfInfo += "Most Frequent Checker: " + analyzer.findMostFrequentChecker();
-                JOptionPane.showMessageDialog(Bookroom.this, bookshelfInfo, "Most Frequent Checker", JOptionPane.INFORMATION_MESSAGE);
-                bookshelfInfo = "";
+                if(analyzer.checkIfFileIsRead())
+                {
+                    bookshelfInfo += "Most Frequent Checker: " + analyzer.findMostFrequentChecker();
+                    JOptionPane.showMessageDialog(Bookroom.this, bookshelfInfo, "Most Frequent Checker", JOptionPane.INFORMATION_MESSAGE);
+                    bookshelfInfo = "";
+                }
             }
             else if(e.getSource() == averageRestockButton)
             {
-                bookshelfInfo += "Average Restock Time: " + analyzer.findAverageRoomRestockedTime();
-                JOptionPane.showMessageDialog(Bookroom.this, bookshelfInfo, "Average Restock Time", JOptionPane.INFORMATION_MESSAGE);
-                bookshelfInfo = "";
+                if(analyzer.checkIfFileIsRead())
+                {
+                    bookshelfInfo += "Average Restock Time: " + analyzer.findAverageRoomRestockedTime();
+                    JOptionPane.showMessageDialog(Bookroom.this, bookshelfInfo, "Average Restock Time", JOptionPane.INFORMATION_MESSAGE);
+                    bookshelfInfo = "";
+                }
             }
             else if(e.getSource() == averageCheckButton)
             {
-                bookshelfInfo += "Average Check Time: " + analyzer.findAverageRestockSignalTime();
-                JOptionPane.showMessageDialog(Bookroom.this, bookshelfInfo, "Average Check Time", JOptionPane.INFORMATION_MESSAGE);
-                bookshelfInfo = "";
+                if(analyzer.checkIfFileIsRead())
+                {
+                    bookshelfInfo += "Average Check Time: " + analyzer.findAverageRestockSignalTime();
+                    JOptionPane.showMessageDialog(Bookroom.this, bookshelfInfo, "Average Check Time", JOptionPane.INFORMATION_MESSAGE);
+                    bookshelfInfo = "";
+                }
+            }
+            else if(e.getSource() == frequentRestockDayButton)
+            {
+                if(analyzer.checkIfFileIsRead())
+                {
+                    bookshelfInfo += "Most Frequent Restock Day: " + analyzer.checkMostFrequentDayRestocked();
+                    JOptionPane.showMessageDialog(Bookroom.this, bookshelfInfo, "Most Frequent Restock Day", JOptionPane.INFORMATION_MESSAGE);
+                    bookshelfInfo = "";
+                }
+            }
+            else if(e.getSource() == frequentRestockMonthButton)
+            {
+                if(analyzer.checkIfFileIsRead())
+                {
+                    bookshelfInfo += "Most Frequent Restock Month: " + analyzer.checkMostFrequentMonthRestocked();
+                    JOptionPane.showMessageDialog(Bookroom.this, bookshelfInfo, "Most Frequent Restock Month", JOptionPane.INFORMATION_MESSAGE);
+                    bookshelfInfo = "";
+                }
+            }
+            else if(e.getSource() == frequentCheckDayButton)
+            {
+                if(analyzer.checkIfFileIsRead())
+                {
+                    bookshelfInfo += "Most Frequent Check Day: " + analyzer.checkMostFrequentDayChecked();
+                    JOptionPane.showMessageDialog(Bookroom.this, bookshelfInfo, "Most Frequent Check Day", JOptionPane.INFORMATION_MESSAGE);
+                    bookshelfInfo = "";
+                }
+            }
+            else if(e.getSource() == frequentCheckMonthButton)
+            {
+                if(analyzer.checkIfFileIsRead())
+                {
+                    bookshelfInfo += "Most Frequent Check Month: " + analyzer.checkMostFrequentMonthChecked();
+                    JOptionPane.showMessageDialog(Bookroom.this, bookshelfInfo, "Most Frequent Check Month", JOptionPane.INFORMATION_MESSAGE);
+                    bookshelfInfo = "";
+                }
             }
         }
         
