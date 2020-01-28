@@ -219,8 +219,10 @@ public class Bookroom extends JFrame
         addComp(analyticsPanel, frequentCheckMonthButton, 3, 3, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
         
         totalRestocksButton = new JButton("Get Total Restocks");
+        totalRestocksButton.addActionListener(lForButtons);
         addComp(analyticsPanel, totalRestocksButton, 0, 4, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
         totalChecksButton = new JButton("Get Total Checks");
+        totalChecksButton.addActionListener(lForButtons);
         addComp(analyticsPanel, totalChecksButton, 1, 4, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
         //not sure about these two things, but
         revenueLabel = new JLabel("Get Specific Restock:");
@@ -228,6 +230,7 @@ public class Bookroom extends JFrame
         revenueField = new JTextField(2);
         addComp(analyticsPanel, revenueField, 2, 4, 1, 1, GridBagConstraints.EAST, GridBagConstraints.NONE);
         getRevenueButton = new JButton("Retrieve Revenue");
+        getRevenueButton.addActionListener(lForButtons);
         addComp(analyticsPanel, getRevenueButton, 3, 4, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
         
         addComp(thePanel, analyticsPanel, 0, 2, 1, 1, GridBagConstraints.NORTH, GridBagConstraints.NONE);
@@ -609,6 +612,36 @@ public class Bookroom extends JFrame
                     bookshelfInfo += "Most Frequent Check Month: " + analyzer.checkMostFrequentMonthChecked();
                     JOptionPane.showMessageDialog(Bookroom.this, bookshelfInfo, "Most Frequent Check Month", JOptionPane.INFORMATION_MESSAGE);
                     bookshelfInfo = "";
+                }
+            }
+            else if(e.getSource() == totalRestocksButton)
+            {
+                if(analyzer.checkIfFileIsRead())
+                {
+                    bookshelfInfo += "Total Restocks: " + analyzer.findTotalNumberOfRestocks();
+                    JOptionPane.showMessageDialog(Bookroom.this, bookshelfInfo, "Total Restocks", JOptionPane.INFORMATION_MESSAGE);
+                    bookshelfInfo = "";
+                }
+            }
+            else if(e.getSource() == totalChecksButton)
+            {
+                if(analyzer.checkIfFileIsRead())
+                {
+                    bookshelfInfo += "Total Checks: " + analyzer.findTotalNumberOfChecks();
+                    JOptionPane.showMessageDialog(Bookroom.this, bookshelfInfo, "Total Checks", JOptionPane.INFORMATION_MESSAGE);
+                    bookshelfInfo = "";
+                }
+            }
+            else if(e.getSource() == getRevenueButton)
+            {
+                if(analyzer.checkIfFileIsRead())
+                {
+                    if(!revenueField.getText().equals("") && (Integer.parseInt(revenueField.getText()) == 0 || Integer.parseInt(revenueField.getText()) % 2 == 0))
+                    {
+                        bookshelfInfo += "Revenue from Selected Restock: " + analyzer.getGrossRevenue(Integer.parseInt(revenueField.getText()));
+                        JOptionPane.showMessageDialog(Bookroom.this, bookshelfInfo, "Revenue", JOptionPane.INFORMATION_MESSAGE);
+                        bookshelfInfo = "";
+                    }
                 }
             }
         }
