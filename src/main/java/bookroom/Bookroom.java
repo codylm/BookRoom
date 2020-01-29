@@ -22,7 +22,7 @@ public class Bookroom extends JFrame
             totalChecksButton, getRevenueButton;
     JButton changeCriteriaButton, changeCriteriaTypeButton, contentsOfShelfButton,
             booksOnShelfButton, getShelfIsFullButton, toggleShelfFullButton, addBookButton,
-            getSpecificShelfButton, allWrongBooksButton, copiesOfBookButton, sortShelfButton; //not sure about selecting but w/e i'll work on it
+            getSpecificShelfButton, allWrongBooksButton, copiesOfBookButton/*, sortShelfButton*/; //not sure about selecting but w/e i'll work on it
     JButton readFileButton, restockerButton, checkerButton, checkRestockerButton, checkCheckerButton,
             frequentRestockerButton, frequentCheckerButton, frequentRestockDayButton,
             frequentRestockMonthButton, frequentCheckDayButton, frequentCheckMonthButton,
@@ -154,9 +154,11 @@ public class Bookroom extends JFrame
         copiesOfBookButton = new JButton("Find # Copies of Book on Shelf");
         copiesOfBookButton.addActionListener(lForButtons);
         addComp(selectedPanel, copiesOfBookButton, 2, 2, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
-        sortShelfButton = new JButton("Sort Shelf");
-        sortShelfButton.addActionListener(lForButtons);
-        addComp(selectedPanel, sortShelfButton, 3, 2, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+        //there's something screwy going on with how collections.sort is sorting stuff, that isn't
+        //happening with the test cases, so I don't even know.
+        //sortShelfButton = new JButton("Sort Shelf");
+        //sortShelfButton.addActionListener(lForButtons);
+        //addComp(selectedPanel, sortShelfButton, 3, 2, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
         
         setRestockButton = new JButton("Mark Shelf for Restock");
         setRestockButton.addActionListener(lForButtons);
@@ -484,6 +486,7 @@ public class Bookroom extends JFrame
                     bookshelfInfo = "";
                 }
             }
+            /*
             else if(e.getSource() == sortShelfButton)
             {
                 if(selectedShelf != null && !shelvesField.getText().equals(""))
@@ -497,7 +500,7 @@ public class Bookroom extends JFrame
                         e1.printStackTrace();
                     }
                 }
-            }
+            }*/
             else if(e.getSource() == readFileButton)
             {
                 analyzer.readRestockFile();

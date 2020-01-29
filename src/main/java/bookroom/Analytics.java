@@ -5,6 +5,13 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+/**
+ * A class to analyze data about the BookshelfGroup's restocking.
+ * @author Cody
+ * @version 1.0
+ * @since 1.0
+ */
+
 public class Analytics
 {
     //Yknow, i'm not actually sure how I wanna pass the file around the class,
@@ -20,17 +27,42 @@ public class Analytics
     //file to their own file(s) and using those files to set up the analysis,
     //so maybe something to shoot for down the line
     
-
+    /**
+     * Flag to check whether the file has been read into the data structures yet.
+     */
     private boolean hasReadFile = false;
-    
+    /**
+     * Data structure that holds the names of restockers and how often their names appear.
+     */
     private Map<String, Integer> restockers;
+    /**
+     * Data structure that holds the names of checkers and how often their names appear.
+     */
     private Map<String, Integer> checkers;
+    /**
+     * Data structure that holds the days that restocks happen and how often they happen.
+     */
     private Map<String, Integer> restockDays;
+    /**
+     * Data structure that holds the months that restocks happen and how often they happen.
+     */
     private Map<String, Integer> restockMonths;
+    /**
+     * Data structure that holds the days that checks happen and how often they happen.
+     */
     private Map<String, Integer> checkDays;
+    /**
+     * Data structure that holds the months that checks happen and how often they happen.
+     */
     private Map<String, Integer> checkMonths;
+    /**
+     * Data structure that holds the lines of the restock data text file.
+     */
     private List<String> restockData;
     
+    /**
+     * Constructor for Analytics.
+     */
     public Analytics()
     {
         restockers = new HashMap<String, Integer>();
@@ -46,6 +78,9 @@ public class Analytics
     //but I can't figure out *what*. Sticking println(restockdataSize)
     //in there shows that the loop is running way more than it should
     //It doesn't affect the end numbers at all though, which is weird
+    /**
+     * Method to read in the restock data file into the appropriate data structure.
+     */
     public void readRestockFile()
     {
         BufferedReader reader = null;
@@ -135,6 +170,11 @@ public class Analytics
         }
     }
     
+    /**
+     * Returns the number of times the given person has restocked the group.
+     * @param name The person to check the numbers of.
+     * @return The number of times the given person has restocked the group.
+     */
     public int getRestockNumbers(String name)
     {
         try
@@ -146,7 +186,12 @@ public class Analytics
             return 0;
         }
     }
-    
+
+    /**
+     * Returns the number of times the given person has checked the group.
+     * @param name The person to check the numbers of.
+     * @return The number of times the given person has checked the group.
+     */
     public int getCheckerNumbers(String name)
     {
         try
@@ -159,6 +204,11 @@ public class Analytics
         }
     }
     
+    /**
+     * Returns the line of restock data at the given index.
+     * @param index The line of data to return.
+     * @return The line of restock data.
+     */
     public String getRestockData(int index)
     {
         return restockData.get(index);
@@ -166,6 +216,12 @@ public class Analytics
     
     //This could probably be made to specifically check for a 24
     //hour period, but this works for basic functionality
+    /**
+     * Checks whether a 24 hour period has passed between the given check and restock.
+     * @param indexOne The index of the desired check data.
+     * @param indexTwo The index of the desired restock data.
+     * @return True if 24 hours have passed, false otherwise.
+     */
     public boolean checkOneDayPassed(int indexOne, int indexTwo)
     {
         String[] checkLine = restockData.get(indexOne).split(" ");
@@ -176,6 +232,11 @@ public class Analytics
     //I'm not sure if this is better than just letting a person check restock
     //numbers directly via the getter, but hey, people are lazy and this
     //saves on mental math
+    /**
+     * Checks to see if the given person is doing the most restocking.
+     * @param name The person to check the numbers of.
+     * @return True if the person is doing the most restocking, false otherwise.
+     */
     public boolean checkForRestocker(String name)
     {
         int restockerRestocks = 0;
@@ -199,6 +260,10 @@ public class Analytics
         return true;
     }
     
+    /**
+     * Returns the person who restocks the group most frequently.
+     * @return The name of the person who restocks most frequently.
+     */
     public String findMostFrequentRestocker()
     {
         String restocker = new String();
@@ -216,6 +281,11 @@ public class Analytics
         return restocker;
     }
     
+    /**
+     * Checks to see if the given person is doing the most checking.
+     * @param name The person to check the numbers of.
+     * @return True if the person is doing the most checking, false otherwise.
+     */
     public boolean checkForChecker(String name)
     {
         int checkerChecks = 0;
@@ -241,6 +311,10 @@ public class Analytics
     
     //Bit of a weird name, this checks for who's signalling the need for restock most often
     //I'll have to rework the file writing a bit to make this work
+    /**
+     * Returns the person who checks the group most frequently.
+     * @return The name of the person who checks most frequently.
+     */
     public String findMostFrequentChecker()
     {
         String checker = new String();
@@ -258,6 +332,10 @@ public class Analytics
         return checker;
     }
     
+    /**
+     * Returns the most frequent day restocks happen.
+     * @return The most frequent day restocks happen.
+     */
     public String checkMostFrequentDayRestocked()
     {
         String day = new String();
@@ -275,6 +353,10 @@ public class Analytics
         return day;
     }
     
+    /**
+     * Returns the most frequent month restocks happen.
+     * @return The most frequent month restocks happen.
+     */
     public String checkMostFrequentMonthRestocked()
     {
         String month = new String();
@@ -292,6 +374,10 @@ public class Analytics
         return month;
     }
     
+    /**
+     * Returns the most frequent day checks happen.
+     * @return The most frequent day checks happen.
+     */
     public String checkMostFrequentDayChecked()
     {
         String day = new String();
@@ -309,6 +395,10 @@ public class Analytics
         return day;
     }
     
+    /**
+     * Returns the most frequent month checks happen.
+     * @return The most frequent month checks happen.
+     */
     public String checkMostFrequentMonthChecked()
     {
         String month = new String();
@@ -331,6 +421,10 @@ public class Analytics
 
     //both this and the other have issues with single times that are thirds
     //of 60, probably because it's an repeating decimal and rounding weirdness?
+    /**
+     * Returns the average time checking happens, as a string.
+     * @return A string representing the average time checks happen.
+     */
     public String findAverageRestockSignalTime()
     {
         int index = 0;
@@ -362,6 +456,10 @@ public class Analytics
     
     //both this and the other have issues with single times that are thirds
     //of 60, probably because it's an repeating decimal and rounding weirdness?
+    /**
+     * Returns the average time restocks happen as a String.
+     * @return A string representing the average times restocks happen.
+     */
     public String findAverageRoomRestockedTime()
     {
         int index = 1;
@@ -391,6 +489,10 @@ public class Analytics
         return averageTime;
     }
     
+    /**
+     * Returns the total number of restocks in the data file.
+     * @return The total number of restocks.
+     */
     public int findTotalNumberOfRestocks()
     {
         int restocks = 0;
@@ -401,6 +503,10 @@ public class Analytics
         return restocks;
     }
     
+    /**
+     * Returns the total number of checks in the data file.
+     * @return The total number of checks.
+     */
     public int findTotalNumberOfChecks()
     {
         int checks = 0;
@@ -411,6 +517,11 @@ public class Analytics
         return checks;
     }
     
+    /**
+     * Returns the gross revenue of a given restock.
+     * @param restockNum The index of the restock to check.
+     * @return The gross revnue of the given restock.
+     */
     public double getGrossRevenue(int restockNum)
     {
         String[] data = restockData.get(restockNum).split(" ");
@@ -418,6 +529,10 @@ public class Analytics
         return revenue;
     }
     
+    /**
+     * Checks if the file has been read.
+     * @return True if the file has been read, false otherwise.
+     */
     public boolean checkIfFileIsRead()
     {
         return hasReadFile;

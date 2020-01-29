@@ -4,39 +4,84 @@ import java.util.*;
 import java.io.*;
 import java.text.SimpleDateFormat;
 
+/**
+ * Class to represent a group of bookcases, particularly in retail settings.
+ * @author Cody
+ * @version 1.0
+ * @since 1.0
+ */
+
 public class BookshelfGroup
 {
+    /**
+     * The collection of bookshelves as a map.
+     */
     private Map<Integer, Bookshelf> shelves;
+    /**
+     * The threshold as a percentage for restocking the group as a decimal.
+     */
     private double percentRestock;
+    /**
+     * How much revenue has been earned since last restock.
+     */
     private double cycleRevenue;
+    /**
+     * Whether the group needs restocking or not.
+     */
     private boolean needsRestock;
     
+    /**
+     * Constructor for BookshelfGroup.
+     * @param percentRestock The default percentage at which the group is marked for restock as a decimal.
+     */
     public BookshelfGroup(double percentRestock)
     {
         shelves = new HashMap<Integer, Bookshelf>();
         this.percentRestock = percentRestock;
     }
     
+    /**
+     * Adds a new bookshelf to the group.
+     * @param key The identifier of the bookshelf.
+     * @param shelf The bookshelf to be added.
+     */
     public void addShelf(int key, Bookshelf shelf)
     {
         shelves.put(key, shelf);
     }
     
+    /**
+     * Returns the given bookshelf.
+     * @param key The identifier to retrieve the bookshelf.
+     * @return The given bookshelf.
+     */
     public Bookshelf getShelf(int key)
     {
         return shelves.get(key);
     }
     
+    /**
+     * Sets the threshold needed to restock the group.
+     * @param percentRestock The new threshold as a decimal.
+     */
     public void setPercentRestock(double percentRestock)
     {
         this.percentRestock = percentRestock;
     }
     
+    /**
+     * Returns the threshold needed to restock the group.
+     * @return The threshold as a decimal.
+     */
     public double getPercentRestock()
     {
         return percentRestock;
     }
     
+    /**
+     * Returns the potential grossRevenue of the entire group of shelves.
+     * @return The potential grossRevenue of the entire group of shelves.
+     */
     public double getGrossRevenue()
     {
         double revenue = 0.0;
@@ -50,6 +95,10 @@ public class BookshelfGroup
         return revenue;
     }
     
+    /**
+     * Returns all shelf criteria classifications as a list of strings.
+     * @return All shelf criteria classifications as a list of strings.
+     */
     public List<Criteria> getAllShelfCriteria()
     {
         List<Criteria> criteria = new ArrayList<Criteria>();
@@ -61,6 +110,10 @@ public class BookshelfGroup
         return criteria;
     }
     
+    /**
+     * Returns all specific criteria types as a list of strings.
+     * @return All specific criteria types as a list of strings.
+     */
     public List<String> getAllShelfCriteriaTypes()
     {
         List<String> types = new ArrayList<String>();
@@ -73,6 +126,11 @@ public class BookshelfGroup
     }
     
     //I think I need an exception here, though maybe not
+    /**
+     * Returns the first bookshelf containing the given book.
+     * @param isb The identifying number of the book to be found.
+     * @return The bookshelf containing the given book.
+     */
     public Bookshelf findFirstShelfOfBook(long isb)
     {
         int shelfFound = -1;
@@ -92,13 +150,11 @@ public class BookshelfGroup
         return null;
     }
     
-    /*public Book findFirstInstanceOfBook(long isb)
-    {
-       I'm not sure I actually need this one, i'll leave it in as a comment for now 
-    }*/
-    
-    //not sure if this should take a book or an isbn
-    //probably need to rework this to an isbn
+    /**
+     * Returns the number of copies of the given book.
+     * @param isbn The identifying number of the book to find the copies of.
+     * @return The number of copies of the given book.
+     */
     public int getNumCopiesOfBook(long isbn)
     {
         int copies = 0;
@@ -109,6 +165,11 @@ public class BookshelfGroup
         return copies;
     }
     
+    /**
+     * Checks whether the group needs to be restocked.
+     * @param name The name of the person checking the group.
+     * @return Whether the group needs to be restocked.
+     */
     public boolean checkForRestock(String name)
     {
         double percent = 0.0;
@@ -158,6 +219,10 @@ public class BookshelfGroup
         }
     }
     
+    /**
+     * Signals that the group has been restocked, resetting the appropriate variables.
+     * @param restockerName The person restocking the group.
+     */
     public void signalRestock(String restockerName)
     {
         for(Bookshelf value : shelves.values())
@@ -190,6 +255,11 @@ public class BookshelfGroup
     
     //this needed a fair bit of reworking to get rid of some errors introduced when some functions in bookshelf
     //changed, need to double check and make sure everything works here
+    /**
+     * Removes the first instance of the given book from the group of shelves.
+     * @param isbn The identifying number of the book to be removed.
+     * @throws BookDoesNotExistException If the book isn't found on any bookshelf in the group.
+     */
     public void removeFirstInstanceOfBook(long isbn) throws BookDoesNotExistException
     {
         outerloop:
